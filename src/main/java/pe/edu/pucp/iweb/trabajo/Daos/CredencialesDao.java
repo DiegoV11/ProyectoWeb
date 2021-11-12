@@ -197,42 +197,32 @@ public class CredencialesDao {
 
 
     //FUNCION PARA REALIZAR INICIO DE SESION
-    public  String inicioSesion(){
-        Scanner sc = new Scanner(System.in);
-
-        for(int i=0; i<3 ; i++){
-            System.out.print("Ingrese su correo: ");
-            String correo = sc.nextLine();
-            System.out.print("Ingrese su contraseña: ");
-            String contrasena = sc.nextLine();
-            String rol=null;
-            String sql="SELECT * FROM credenciales c WHERE BINARY c.correo = ? AND c.contrasena LIKE BINARY ?";
-            try(Connection conn = DriverManager.getConnection(url,user,password);
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-                pstmt.setString(1,correo);
-                pstmt.setString(2,contrasena);
-
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    rol = rs.getString(1);
+    public  String inicioSesion(String correo, String contrasena){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        String rol=null;
+        String error ="invalid";
+        String sql="SELECT * FROM mydb.credenciales where correo = ? and contrasena = ?";
+        try(Connection conn = DriverManager.getConnection(url,user,password);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1,correo);
+            pstmt.setString(2,contrasena);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                    rol = rs.getString(3);
                 }
-                if (rol !=null){
-                    return correo;
-                }else{
-                    if (i+1 == 3){
-                        System.out.println("Usted ha sido bloqueado");
-                    }else{
-                        System.out.println("El correo o la contraseña son incorrectos");
-                    }
 
-                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-
+        if (rol !=null){
+            return rol;
+        }else{
+            return error;
         }
-        return null;
     }
 
 

@@ -30,37 +30,30 @@
 
                     <div class="signin-form">
                         <h2 style="text-align:center;" class="form-title">Iniciar sesión TeleDrugs</h2>
-                        <form method="POST" class="register-form" id="login-form">
+                        <form method="POST" action="<%=request.getContextPath()%>/PaginaPrincipal" class="register-form" id="login-form">
                             <div class="form-group">
                                 <label for="correo"><i class="zmdi zmdi-email"></i></label>
                                 <input type="correo" name="correo" id="correo" placeholder="Correo electrónico"/>
                             </div>
                             <div class="form-group">
-                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="your_pass" id="your_pass" placeholder="Contraseña"/>
+                                <label for="contrasenia"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="constrasenia" id="contrasenia" placeholder="Contraseña"/>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Recordarme</label>
+                                <%/* <input type="checkbox" name="remember-me" id="remember-me" class="agree-term"
+                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Recordarme</label>*/%>
                                 <br>
                                 <br>
-
                                 <!--a href="Login/recuperar.jsp" class="signup-image-link">¿Has olvidado tu contraseña?</a-->
                                 <a href="<%= request.getContextPath() %>/RecuperarContrasena" class="signup-image-link">¿Has olvidado tu contraseña?</a>
                             </div>
                             <div class="form-group form-button">
-                                <div style="display:flex; align-items:center; justify-content:center;" class="column"><a href="<%= request.getContextPath() %>/PaginaPrincipal" style="width:150px" class="btn btn-success" data-bs-toggle="modal" >Ingresar</a></div>
+                                <div style="display:flex; align-items:center; justify-content:center;" class="column">
+                                    <button class="btn btn-success" style="width:150px" type="submit">Ingresar</button>
+                                </div>
                             </div>
 
                         </form>
-                        <!--<div class="social-login">
-                            <span class="social-label">Or login with</span>
-                            <ul class="socials">
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                                <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                            </ul>
-                        </div>-->
                     </div>
                 </div>
             </div>
