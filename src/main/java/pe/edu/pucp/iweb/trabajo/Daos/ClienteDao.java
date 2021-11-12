@@ -45,7 +45,7 @@ public class ClienteDao {
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //FUNCION PARA REGISTRAR CLIENTE
-    public void registrarCliente(String correoElectronico,String contrasenia){
+    public boolean registrarCliente(String correoElectronico,String contrasenia){
             String sqlBusqueda = "SELECT correo FROM credenciales";
             CredencialesDao c = new CredencialesDao();
             boolean bandera = false;
@@ -68,6 +68,7 @@ public class ClienteDao {
                                     pstmt.setString(2, contrasenia);
                                     pstmt.executeUpdate();
                                     System.out.println("Se ha registrado correctamente");
+                                    return true;
                                 } else {
                                     System.out.println("La contraseña debe contener al menos: ");
                                     System.out.println("1. Letra minuscula ");
@@ -75,18 +76,22 @@ public class ClienteDao {
                                     System.out.println("3. Un simbolo #/?@-");
                                     System.out.println("4. Al menos 8 letras");
                                     System.out.println("5. Ingrese al menos 1 numero");
+                                    return false;
                                 }
 
                         } else {
                             System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
+                            return false;
                         }
                     }
                 } else {
                     System.out.println("Este correo ya se encuentra registrado");
+                    return false;
                 }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
+            return false;
     }
     //FUNCION QUE REGISTRA A UN USUARIO YA HAY CORREO
     public void registrarDatosUsuario(String logueo_correo, String dni, String nombre, String apellidos,String fecha,String distrito) {

@@ -37,10 +37,13 @@ public class PaginaPrincipal extends HttpServlet {
             System.out.println(contrasenia);
             System.out.println(recontrasenia);
             ClienteDao clienteDao = new ClienteDao();
-            clienteDao.registrarCliente(email,contrasenia);
-            clienteDao.registrarDatosUsuario(email,dni,nombreCompleto,nombreCompleto,birthday,distrito);
-            response.sendRedirect(request.getContextPath());
-
+            boolean registro=clienteDao.registrarCliente(email,contrasenia);
+            if(registro) {
+                clienteDao.registrarDatosUsuario(email, dni, nombreCompleto, nombreCompleto, birthday, distrito);
+                response.sendRedirect(request.getContextPath());
+            }else {
+                response.sendRedirect(request.getContextPath() + "/Registro");
+            }
 
 
 
