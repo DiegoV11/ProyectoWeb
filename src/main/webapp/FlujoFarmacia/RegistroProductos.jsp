@@ -20,9 +20,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" href="FlujoFarmacia/AgregarProducto.jsp">Agregar Producto</a></li>
-						<li class="nav-item"><a class="nav-link" href="FlujoFarmacia/RegistroProductos.jsp">Lista de Productos</a></li>
-						<li class="nav-item"><a class="nav-link" href="FlujoFarmacia/HistorialPedidos.jsp">Historial de pedidos</a></li>
+                      FlujoFarmacia/
                     </ul>
 						<div class="dropdown">
 						  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,13 +67,13 @@
             </thead>
             <tbody>
                 <tr>
-					<td class="text-center text-lg text-medium"><center><img style = "width: 20%; margin:auto" src="Imagen/provisional.png"></center> </td>
+					<td class="text-center text-lg text-medium"><center><img style = "width: 20%; margin:auto" src="FlujoFarmacia/Imagen/provisional.png"></center> </td>
 					<td class="text-center text-lg text-medium">Paracetamol</td>
 					<td class="text-center text-lg text-medium">El paracetamol es un medicamento de venta sin receta médica que se da para aliviar la fiebre y el dolor.</td>
 					<td class="text-center text-lg text-medium">5</td>
 					<td class="text-center text-lg text-medium">S/10</td>
 					<td class="text-center text-lg text-medium">
-						<div class="column"><a style="width:120px; margin:5px;" class="btn btn-success" href="EditarProducto.jsp">Editar</a></div>
+						<div class="column"><a style="width:120px; margin:5px;" class="btn btn-success" href="FlujoFarmacia/EditarProducto.jsp">Editar</a></div>
 					</td>
 					<td class="text-center">
 						<div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">

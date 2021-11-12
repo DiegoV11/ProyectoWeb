@@ -39,42 +39,6 @@
                 </div>
             </div>
         </nav>
-        <!-- Navigation-->
-        <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container px-5 px-lg-0">
-                <a class="navbar-brand" href="#!">Administrador</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Agregar Farmacias</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Lista de Farmacias</a></li>
-						<li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Bloqueo de Farmacias</a></li> -->
-		
-						
-
-						
-						
-                      <!--   <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bloqueo de Farmacias</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                            </ul>
-                        </li> -->
-		<!-- 			<i class='bi bi-person-circle' style='font-size:38px'></i>	
-					
-                    </ul>
-					<form class="d-flex">	                 			
-						<button class= "btn-outline-dark" style='font-size:18px' > Cerrar Sesión </i>
-						</button>
-                    </form>
-                </div>
-            </div>
-        </nav> -->
-        <!-- Header-->
-		
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
@@ -94,43 +58,22 @@
 							<h1 style="margin-top:20px;"class="display-7 fw-bolder">Farmacia</h1>
                             <!-- Product image-->
 							
-								<form>
+								<form method="POST" action="request.getContextPath()%>/AgregarFarmacia">
 								<i class="bi bi-camera-fill"style='font-size:30px'></i>
 								<input type="file" name="Imagen" id="add-new-photo" value="image/*">
 								<div class="signup-image">
-									<figure style="display:flex; justify-content:center; align-items:center; margin-top:20px; margin-bottom:0px"><img src="FlujoAdministrador/Imagenes/farmacia.jpg" alt="house image" width="230px" height="200px"></figure>
+									<figure style="display:flex; justify-content:center; align-items:center; margin-top:20px; margin-bottom:0px"><img src="FlujoAdministrador/AgregarFarmacias/Imagenes/farmacia.jpg" alt="house image" width="230px" height="200px"></figure>
 								</div>
-								</form>
-								<!-- <img src="Imagenes/farmacia.jpg" alt="Imagen de Farmacia"></img> -->
-								<!-- Product details-->
-								<!-- <div class="card-body p-0">
-									<div class="text-right">
-									<br> -->
-										<!-- Product name-->
-									   <!--  <p>RUC:<input type="number" id="RUC" name="RUC"</p>
-									</div>
-									<div class="text-right"> -->
-										<!-- Product name-->
-									 <!--    <pre class="fw-bolder">Dirección: </pre>
-									</div>
-									<div class="text-right"> -->
-										<!-- Product name-->
-									<!-- <p> <i class="zmdi zmdi-home"></i> Distrito: -->
+
+
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="number" id="number" placeholder="RUC:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="RUC" id="number" placeholder="RUC:">
 								<br>
 								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Direccion" id="Dirección" placeholder="Dirección:">
 								<br>
-									<!-- <p><input list="Distrito" type="search" name="Busqueda" id="Distrito" placeholder="Distrito:">
-											<datalist id="Distrito"> 	 -->							
-											
-											<!-- </datalist> -->
-									<!-- </p>
-									<form action="../../form-result.php" method="post" target="_blank"> -->
 
-							
 
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="campobusqueda" list="listadistritos" placeholder="Distrito">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="Distrito" list="listadistritos" placeholder="Distrito">
 									<datalist id="listadistritos">
                                     <option value="Ancón">Ancón</option>
                                     <option value="Ate">Ate</option>
@@ -177,9 +120,9 @@
                                     <option value="Villa María del Triunfo">Villa María del Triunfo</option>
 								</datalist>
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="nombre" id="nombre" placeholder="Nombre de la Farmacia:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Nombre" id="nombre" placeholder="Nombre de la Farmacia:">
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="email" id="email" placeholder="Correo:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="Correo" id="email" placeholder="Correo:">
 
 								<br>
 								<head>
@@ -192,7 +135,7 @@
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 									  </div>
 									  <div class="modal-body">
-										¿Estas seguro de que quiere agregar la Farmacia?.
+										¿Estas seguro de que quiere agregar la Farmacia?
 									  </div>
 									  <div class="modal-footer">
 										<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -210,7 +153,7 @@
                     </div>
                 </div>
             </div>
-			<a style="margin-bottom:20px; margin-right:20px; margin-top:0px; width:200px; float: right;" class="btn btn-secondary" href="FlujoAdministrador/Listafarmacias/Listafarmacias.jsp" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Regresar</a>
+			<a style="margin-bottom:20px; margin-right:20px; margin-top:0px; width:200px; float: right;" class="btn btn-secondary" href="<%=request.getContextPath()%>/AdminPrincipal" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Regresar</a>
 			<!-- <a href="javascript:history.back()"><img src="Imagenes/izquierda.jpg" height="48" width="48" style= "float:right" alt="Botón"</a> -->
 			
         </section>
