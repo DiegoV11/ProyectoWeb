@@ -2,7 +2,8 @@ package pe.edu.pucp.iweb.trabajo.Beans;
 
 public class BAdministrador {
     private String contrasenia;
-    private String logueCorreo;
+    private String logueoCorreo;
+
 
     public String getContrasenia() {
         return contrasenia;
@@ -12,12 +13,12 @@ public class BAdministrador {
         this.contrasenia = contrasenia;
     }
 
-    public String getLogueCorreo() {
-        return logueCorreo;
+    public String getLogueoCorreo() {
+        return logueoCorreo;
     }
 
-    public void setLogueCorreo(String logueCorreo) {
-        this.logueCorreo = logueCorreo;
+    public void setLogueoCorreo(String logueCorreo) {
+        this.logueoCorreo = logueCorreo;
     }
 
 

@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
+<jsp:useBean type="java.lang.String" scope="request" id="correo"/>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -47,7 +48,7 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Lista de Farmacias</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Administrador(a) Juan Perez</p>
+                    <p class="lead fw-normal text-white-50 mb-0"><%=correo%></p>
                 </div>
             </div>
 			<div style="margin-top:30px;"class = "box">

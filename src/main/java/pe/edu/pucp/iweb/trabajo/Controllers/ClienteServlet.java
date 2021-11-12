@@ -12,7 +12,6 @@ public class ClienteServlet extends HttpServlet {
         RequestDispatcher view = request.getRequestDispatcher("FlujoUsuario/homepage.jsp");
         view.forward(request,response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

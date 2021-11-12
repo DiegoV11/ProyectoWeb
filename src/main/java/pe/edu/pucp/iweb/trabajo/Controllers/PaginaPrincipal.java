@@ -1,5 +1,6 @@
 package pe.edu.pucp.iweb.trabajo.Controllers;
 
+import pe.edu.pucp.iweb.trabajo.Beans.BAdministrador;
 import pe.edu.pucp.iweb.trabajo.Daos.ClienteDao;
 import pe.edu.pucp.iweb.trabajo.Daos.CredencialesDao;
 
@@ -58,7 +59,7 @@ public class PaginaPrincipal extends HttpServlet {
             String rol = credencialesDao.inicioSesion(correo, constrasenia);
 
             if (rol.equalsIgnoreCase("administrador")) {
-                response.sendRedirect(request.getContextPath() + "/AdminPrincipal");
+                response.sendRedirect(request.getContextPath() + "/AdminPrincipal?id="+correo);
             } else if (rol.equalsIgnoreCase("cliente")) {
                 response.sendRedirect(request.getContextPath() + "/ClientePrincipal");
             } else if (rol.equalsIgnoreCase("farmacia")) {
