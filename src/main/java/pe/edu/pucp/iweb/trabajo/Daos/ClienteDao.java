@@ -45,11 +45,7 @@ public class ClienteDao {
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //FUNCION PARA REGISTRAR CLIENTE
-    public String registrarCliente(){
-        while (true) {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Ingrese su correo electronico: ");
-            String correoElectronico = sc.nextLine();
+    public void registrarCliente(String correoElectronico,String contrasenia){
             String sqlBusqueda = "SELECT correo FROM credenciales";
             CredencialesDao c = new CredencialesDao();
             boolean bandera = false;
@@ -67,15 +63,11 @@ public class ClienteDao {
                     String sql = "INSERT INTO credenciales(correo,contrasena,rol) VALUES(?,?,'cliente')";
                     try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                         if (c.emailisValid(correoElectronico)) {
-                            while (true) {
-                                System.out.println("Ingrese su contraseña: ");
-                                String contrasenia = sc.nextLine();
                                 if (c.contrasenaisValid(contrasenia)) {
                                     pstmt.setString(1, correoElectronico);
                                     pstmt.setString(2, contrasenia);
                                     pstmt.executeUpdate();
                                     System.out.println("Se ha registrado correctamente");
-                                    return correoElectronico;
                                 } else {
                                     System.out.println("La contraseña debe contener al menos: ");
                                     System.out.println("1. Letra minuscula ");
@@ -84,7 +76,7 @@ public class ClienteDao {
                                     System.out.println("4. Al menos 8 letras");
                                     System.out.println("5. Ingrese al menos 1 numero");
                                 }
-                            }
+
                         } else {
                             System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
                         }
@@ -95,89 +87,27 @@ public class ClienteDao {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }
     }
     //FUNCION QUE REGISTRA A UN USUARIO YA HAY CORREO
-    public void registrarDatosUsuario(String logueo_correo) {
-        Scanner sc = new Scanner(System.in);
-
-        String sqlBusqueda = "SELECT * FROM cliente";
+    public void registrarDatosUsuario(String logueo_correo, String dni, String nombre, String apellidos,String fecha,String distrito) {
+        String sqlInsert = "INSERT INTO cliente(dni,nombre,apellidos,fecha_nac,distrito,logueo_correo)\n" +
+                "VALUES(?,?,?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(url, user, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sqlBusqueda);) {
-
-            String dni;
-
-            BuclePrincipal:
-            while (true) {
-                System.out.print("Ingrese su dni: ");
-                dni = sc.nextLine();
-
-                if (dniValid(dni)) {
-                    while (rs.next()) {
-                        String DNI = rs.getString(1);
-                        if (dni.equalsIgnoreCase(DNI)) {
-                            System.out.println("El DNI tiene que ser unico");
-                            continue BuclePrincipal;
-                        }
-                    }
-                    break;
-                } else {
-                    System.out.println("No te creas habil!!!");
-                }
-            }
-
+             PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
             if (dniValid(dni)) {
-                String sqlInsert = "INSERT INTO cliente(dni,nombre,apellidos,fecha_nac,distrito,logueo_correo)\n" +
-                        "VALUES(?,?,?,?,?,?)";
-                try (PreparedStatement pstmt = conn.prepareStatement(sqlInsert);) {
-                    String nombre;
-                    String apellidos;
-                    String fecha;
-                    while (true) {
-                        System.out.print("Ingrese su nombre: ");
-                        nombre = sc.nextLine();
-                        if (nombreyApellidoValid(nombre)) {
-                            break;
-                        } else {
-                            System.out.println("No te creas habil!!!");
-                        }
+                    if (nombreyApellidoValid(nombre)) {
+                        pstmt.setString(2, nombre);
                     }
-
-                    while (true) {
-                        System.out.print("Ingrese su apellido: ");
-                        apellidos = sc.nextLine();
-                        if (nombreyApellidoValid(apellidos)) {
-                            break;
-                        } else {
-                            System.out.println("No te creas habil!!!");
+                    if (nombreyApellidoValid(apellidos)) {
+                        pstmt.setString(3, apellidos);
                         }
-                    }
-
-                    pstmt.setString(2, nombre);
-                    pstmt.setString(3, apellidos);
-
-
-                    while (true) {
-                        System.out.print("Ingrese su fecha de nacimiento (AAAA-MM-DD): ");
-                        fecha = sc.nextLine();
-                        if (fechaIsValid(fecha)) {
-                            break;
-                        } else {
-                            System.out.println("No te creas habil!!!");
+                    if (fechaIsValid(fecha)) {
+                        pstmt.setString(4, fecha);
                         }
-                    }
-
-                    pstmt.setString(4, fecha);
-
-                    System.out.print("Ingrese su distrito: ");
-                    String distrito = sc.nextLine();
-                    pstmt.setString(5, distrito);// VALIDAR SI EL DISTRITO EXISTE CON EL ARREGLO
+                    pstmt.setString(5, distrito);
                     pstmt.setString(6, logueo_correo);
                     pstmt.setString(1, dni);
                     pstmt.executeUpdate();
-
-                }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

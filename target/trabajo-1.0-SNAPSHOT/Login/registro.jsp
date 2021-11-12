@@ -1,5 +1,7 @@
+<%@ page import="pe.edu.pucp.iweb.trabajo.Beans.BFarmacia" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +25,7 @@
                 <div class="signup-content">
                     <div class="signup-form"  style="margin-right:10px; margin-left:10px;" >
                         <h2 style="text-align:center" class="form-title">Registrarse</h2>
-                        <form method="POST" class="register-form" id="register-form" >
+                        <form method="POST" action="<%=request.getContextPath()%>/PaginaPrincipal?act=reg" class="register-form" id="register-form" >
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                 <input style="width:400px;" type="text" name="name" id="name" placeholder="Nombres y Apellidos"/>
@@ -37,54 +39,15 @@
                                 <input style="width:400px;" type="date" name="birthday" id="birthday" placeholder="Fecha de nacimiento"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
-                                <label for="listadistritos"><i class="zmdi zmdi-home"></i></label>
+                                <label for="listadistrito"><i class="zmdi zmdi-home"></i></label>
 
-                                <input style="width:400px;" type="search" name="campobusqueda" list="listadistritos" placeholder="Distrito en el que reside">
+                                <input style="width:400px;" type="search" name="distrito" list="listadistrito" placeholder="Distrito en el que reside">
 
-                                <datalist id="listadistritos">
-                                    <option value="Ancón">Ancón</option>
-                                    <option value="Ate">Ate</option>
-                                    <option value="Barranco">Barranco</option>
-                                    <option value="Breña">Breña</option>
-                                    <option value="Carabayllo">Carabayllo</option>
-                                    <option value="Chaclacayo">Chaclacayo</option>
-                                    <option value="Chorrillos">Chorrillos</option>
-                                    <option value="Cieneguilla">Cieneguilla</option>
-                                    <option value="Comas">Comas</option>
-                                    <option value="El Agustino">El Agustino</option>
-                                    <option value="Independencia">Independencia</option>
-                                    <option value="Jesus María">Jesus María</option>
-                                    <option value="La Molina">La Molina</option>
-                                    <option value="La Victoria">La Victoria</option>
-                                    <option value="Lima">Lima</option>
-                                    <option value="Lince">Lince</option>
-                                    <option value="Los Olivos">Los Olivos</option>
-                                    <option value="Lurigancho">Lurigancho</option>
-                                    <option value="Lurín">Lurín</option>
-                                    <option value="Magdalena del Mar">Magdalena del Mar</option>
-                                    <option value="Miraflores">Miraflores</option>
-                                    <option value="Pachacamac">Pachacamac</option>
-                                    <option value="Pucusana">Pucusana</option>
-                                    <option value="Pueblo Libre">Pueblo Libre</option>
-                                    <option value="Puente Piedra">Puente Piedra</option>
-                                    <option value="Punta Hermosa">Punta Hermosa</option>
-                                    <option value="Punta Negra">Punta Negra</option>
-                                    <option value="Rimac">Rimac</option>
-                                    <option value="San Bartolo">San Bartolo</option>
-                                    <option value="San Borja">San Borja</option>
-                                    <option value="San Isidro">San Isidro</option>
-                                    <option value="San Juan de Lurigancho">San Juan de Lurigancho</option>
-                                    <option value="San Juan de Miraflores">San Juan de Miraflores</option>
-                                    <option value="San Luis">San Luis</option>
-                                    <option value="San Martin de Porres">San Martin de Porres</option>
-                                    <option value="San Miguel">San Miguel</option>
-                                    <option value="Santa Anita">Santa Anita</option>
-                                    <option value="Santa María del Mar">Santa María del Mar</option>
-                                    <option value="Santa Rosa">Santa Rosa</option>
-                                    <option value="Santiago de Surco">Santiago de Surco</option>
-                                    <option value="Surquillo">Surquillo</option>
-                                    <option value="Villa el Salvador">Villa el Salvador</option>
-                                    <option value="Villa María del Triunfo">Villa María del Triunfo</option>
+                                <datalist id="listadistrito">
+                                    <%for(BFarmacia farmacia: listaFarmacias){ %>
+
+                                    <option value="<%=farmacia.getDistrito()%>"><%=farmacia.getDistrito()%></option>
+                                    <%}%>
                                 </datalist>
 
                             </div>
@@ -105,13 +68,14 @@
                                 <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                             </div>-->
                             <div class="form-group form-button">
-                                <div style="display:flex; align-items:center; justify-content:center;" class="column"><a style="width:150px" class="btn btn-success" data-bs-toggle="modal" href="#exampleModalToggle" onclick="alert('Para iniciar sesion vuelva a la pagina de inicio de sesion')">Registrar</a></div>
-							</div>
+                                <div style="display:flex; align-items:center; justify-content:center;" class="column">
+                                    <button class="btn btn-success" style="width:150px" type="submit">Registrar</button>
+                                   </div>
+                            </div>
                         </form>
                     </div>
                     <div class="signup-image" style="margin-right:0px; margin-left:0px" >
                         <figure style="margin-bottom:40px; margin-top:40px; height:400px; width:400px;"><img src="Login/images/Cyborg-amico.png" alt="sing up image"></figure>
-                        <!--a href="iniciar.jsp" class="signup-image-link">Ya soy miembro</a-->
                         <a href="<%= request.getContextPath() %>" class="signup-image-link">Ya soy miembro</a>
                     </div>
                 </div>
