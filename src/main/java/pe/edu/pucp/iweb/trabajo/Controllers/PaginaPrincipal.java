@@ -30,13 +30,6 @@ public class PaginaPrincipal extends HttpServlet {
             String contrasenia = request.getParameter("pass");
             String recontrasenia = request.getParameter("re_pass");
 
-            System.out.println(nombreCompleto);
-            System.out.println(dni);
-            System.out.println(distrito);
-            System.out.println(birthday);
-            System.out.println(email);
-            System.out.println(contrasenia);
-            System.out.println(recontrasenia);
             ClienteDao clienteDao = new ClienteDao();
             boolean registro=clienteDao.registrarCliente(email,contrasenia);
             if(registro) {
@@ -48,24 +41,23 @@ public class PaginaPrincipal extends HttpServlet {
 
 
 
-
         } else if (act.equalsIgnoreCase("login")) {
 
             String constrasenia = request.getParameter("constrasenia");
             String correo = request.getParameter("correo");
-            System.out.println(correo);
-            System.out.println(constrasenia);
             CredencialesDao credencialesDao = new CredencialesDao();
             String rol = credencialesDao.inicioSesion(correo, constrasenia);
+            BAdministrador bAdministrador=new BAdministrador();
+            bAdministrador.setContrasenia(constrasenia);
+            bAdministrador.setLogueoCorreo(correo);
 
             if (rol.equalsIgnoreCase("administrador")) {
-                response.sendRedirect(request.getContextPath() + "/AdminPrincipal?id="+correo);
+                response.sendRedirect(request.getContextPath() + "/AdminPrincipal");
             } else if (rol.equalsIgnoreCase("cliente")) {
                 response.sendRedirect(request.getContextPath() + "/ClientePrincipal");
             } else if (rol.equalsIgnoreCase("farmacia")) {
                 response.sendRedirect(request.getContextPath() + "/FarmaciaPrincipal");
             }
-
         }
         }
 }

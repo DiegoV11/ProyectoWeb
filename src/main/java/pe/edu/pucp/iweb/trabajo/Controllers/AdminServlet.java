@@ -15,11 +15,9 @@ public class AdminServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
-        String correo = request.getParameter("id");
         FarmaciaDao farmaciaDao = new FarmaciaDao() ;
         ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias();
         request.setAttribute("listaFarmacias",listaFarmacias);
-        request.setAttribute("correo",correo);
         RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
         view.forward(request,response);
     }

@@ -97,25 +97,19 @@ public class ClienteDao {
     public void registrarDatosUsuario(String logueo_correo, String dni, String nombre, String apellidos,String fecha,String distrito) {
         String sqlInsert = "INSERT INTO cliente(dni,nombre,apellidos,fecha_nac,distrito,logueo_correo)\n" +
                 "VALUES(?,?,?,?,?,?)";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
-            if (dniValid(dni)) {
-                    if (nombreyApellidoValid(nombre)) {
-                        pstmt.setString(2, nombre);
-                    }
-                    if (nombreyApellidoValid(apellidos)) {
-                        pstmt.setString(3, apellidos);
-                        }
-                    if (fechaIsValid(fecha)) {
-                        pstmt.setString(4, fecha);
-                        }
-                    pstmt.setString(5, distrito);
-                    pstmt.setString(6, logueo_correo);
-                    pstmt.setString(1, dni);
-                    pstmt.executeUpdate();
+        if (dniValid(dni) && nombreyApellidoValid(nombre) && nombreyApellidoValid(apellidos) && fechaIsValid(fecha)) {
+            try (Connection conn = DriverManager.getConnection(url, user, password);
+                 PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
+                pstmt.setString(2, nombre);
+                pstmt.setString(3, apellidos);
+                pstmt.setString(4, fecha);
+                pstmt.setString(5, distrito);
+                pstmt.setString(6, logueo_correo);
+                pstmt.setString(1, dni);
+                pstmt.executeUpdate();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 

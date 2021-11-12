@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
-<jsp:useBean type="java.lang.String" scope="request" id="correo"/>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -48,14 +47,14 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Lista de Farmacias</h1>
-                    <p class="lead fw-normal text-white-50 mb-0"><%=correo%></p>
+                    <p class="lead fw-normal text-white-50 mb-0">ADMINISTRADOR</p>
                 </div>
             </div>
 			<div style="margin-top:30px;"class = "box">
 					<input type="text" name="search" placeholder="Buscar farmacia" class="src" autocomplete = "off">
 			</div>
 			<div style="display:flex; align-items:center; justify-content:center; margin-top: 50px; margin-bottom: 15px;">
-				<a class="btn btn-success" href="FlujoAdministrador/AgregarFarmacias/AgregarFarmacias.jsp" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Agregar Farmacia</a>
+				<a class="btn btn-success" href="<%=request.getContextPath()%>/AgregarFarmacia" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Agregar Farmacia</a>
 			</div>
 		</header>
 		

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -195,14 +196,16 @@
 									  </div>
 									  <div class="modal-footer">
 										<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-										<button class="btn btn-success" onclick="alert('Se le ha enviado una confirmacion al correo electronico')" data-bs-dismiss="modal">Aceptar</button>
+										<button class="btn btn-success" type="submit" onclick="alert('Se le ha enviado una confirmacion al correo electronico')" data-bs-dismiss="modal">Aceptar</button>
 									  </div>
 									</div>
 								  </div>
 								</div>
-								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" onclick="return eliminardatos()" class="btn btn-danger" href="FlujoAdministrador/AgregarFarmacias.jsp">Limpiar</a>
-								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Aceptar</a>
-								
+								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" onclick="return eliminardatos()" class="btn btn-danger" href="<%=request.getContextPath()%>/AgregarFarmacia">Limpiar</a>
+								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success"  href="#exampleModalToggle" data-bs-toggle="modal" role="button">Aceptar</a>
+                                    <!--button class="btn btn-success" style="width:150px" data-bs-toggle="modal" type="submit">Aceptar</button-->
+                                </form>
+
                         </div>
                     </div>
                 </div>
