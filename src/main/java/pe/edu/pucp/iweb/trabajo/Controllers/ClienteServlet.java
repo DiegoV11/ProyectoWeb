@@ -9,6 +9,7 @@ import java.io.IOException;
 public class ClienteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Request HOLA
         RequestDispatcher view = request.getRequestDispatcher("FlujoUsuario/homepage.jsp");
         view.forward(request,response);
     }
