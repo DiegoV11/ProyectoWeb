@@ -91,6 +91,7 @@
                     <td class="text-center text-lg text-medium"><%=farmacia.getBloqueado()%></td>
                     <td class="text-center">
 						<div class="form-check" style="display:flex; align-items:center; justify-content:center">
+
 							<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
 						</div></td>
                 </tr>

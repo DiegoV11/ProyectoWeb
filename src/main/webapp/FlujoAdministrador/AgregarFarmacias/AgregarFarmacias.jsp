@@ -58,7 +58,7 @@
 							<h1 style="margin-top:20px;"class="display-7 fw-bolder">Farmacia</h1>
                             <!-- Product image-->
 							
-								<form method="POST" action="request.getContextPath()%>/AgregarFarmacia">
+								<form method="POST" action="<%=request.getContextPath()%>/AgregarFarmacia" class="register-form" id="register-form">
 								<i class="bi bi-camera-fill"style='font-size:30px'></i>
 								<input type="file" name="Imagen" id="add-new-photo" value="image/*">
 								<div class="signup-image">
@@ -67,13 +67,13 @@
 
 
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="RUC" id="number" placeholder="RUC:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="ruc" id="ruc" placeholder="RUC:">
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Direccion" id="Dirección" placeholder="Dirección:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="direccion" id="direccion" placeholder="Dirección:">
 								<br>
 
 
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="Distrito" list="listadistritos" placeholder="Distrito">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="distrito" list="listadistritos" placeholder="Distrito">
 									<datalist id="listadistritos">
                                     <option value="Ancón">Ancón</option>
                                     <option value="Ate">Ate</option>
@@ -120,32 +120,34 @@
                                     <option value="Villa María del Triunfo">Villa María del Triunfo</option>
 								</datalist>
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Nombre" id="nombre" placeholder="Nombre de la Farmacia:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="nombre" id="nombre" placeholder="Nombre de la Farmacia:">
 								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="Correo" id="email" placeholder="Correo:">
+								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="correo" id="correo" placeholder="Correo:">
 
 								<br>
 								<head>
 								<!-- Modal -->
-								<div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-								  <div class="modal-dialog modal-dialog-centered">
-									<div class="modal-content">
-									  <div class="modal-header">
-										<h5 class="modal-title" id="exampleModalToggleLabel">Confirmación</h5>
-										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-									  </div>
-									  <div class="modal-body">
-										¿Estas seguro de que quiere agregar la Farmacia?
-									  </div>
-									  <div class="modal-footer">
-										<button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-										<button class="btn btn-success" type="submit" onclick="alert('Se le ha enviado una confirmacion al correo electronico')" data-bs-dismiss="modal">Aceptar</button>
-									  </div>
-									</div>
-								  </div>
-								</div>
+                                    <!-- Modal -->
+                                    <div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalToggleLabel">Confirmación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Estas seguro de que quiere agregar la Farmacia?.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button class="btn btn-success" data-bs-dismiss="modal" type="submit">Aceptar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" onclick="return eliminardatos()" class="btn btn-danger" href="<%=request.getContextPath()%>/AgregarFarmacia">Limpiar</a>
-								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success"  href="#exampleModalToggle" data-bs-toggle="modal" role="button">Aceptar</a>
+                                    <a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Aceptar</a>
+
                                     <!--button class="btn btn-success" style="width:150px" data-bs-toggle="modal" type="submit">Aceptar</button-->
                                 </form>
 
@@ -160,8 +162,6 @@
 		<!-- <div id="regresar"> -->
 		
           <!--  </div> -->
-		
-		</form>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; TeleDrugs 2021</p></div>
