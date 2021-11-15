@@ -9,7 +9,8 @@ import java.io.IOException;
 public class ClienteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Request HOLA
+        String DNI = request.getParameter("action");
+        request.setAttribute("dni",DNI);
         RequestDispatcher view = request.getRequestDispatcher("FlujoUsuario/homepage.jsp");
         view.forward(request,response);
     }
@@ -18,3 +19,4 @@ public class ClienteServlet extends HttpServlet {
 
     }
 }
+

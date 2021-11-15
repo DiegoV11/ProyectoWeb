@@ -12,28 +12,35 @@ public class FarmaciaDao {
 
 
     String user = "root";
-        String password = "root";
-        String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
+    String password = "root";
+    String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
 
-        public boolean nombreyApellidoValid(String nombre) {
-            String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(nombre);
-            return matcher.find();
-        }
-        public boolean rucValid(String ruc) {
-            String regex = "^[0-9]{11,11}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(ruc);
-            return matcher.find();
-        }
-        public boolean pedidosPendientes(String dni) {
-            String regex = "^[0-1]{1,1}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(dni);
-            return matcher.find();
-        }
-        Scanner sc = new Scanner(System.in);
+    public boolean nombreyApellidoValid(String nombre) {
+        String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(nombre);
+        return matcher.find();
+    }
+    public boolean rucValid(String ruc) {
+        String regex = "^[0-9]{11,11}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(ruc);
+        return matcher.find();
+    }
+    public boolean pedidosPendientes(String dni) {
+        String regex = "^[0-1]{1,1}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(dni);
+        return matcher.find();
+    }
+    Scanner sc = new Scanner(System.in);
+
+    public boolean contrasenaisValid(String contrasenia) {
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(contrasenia);
+        return matcher.find();
+    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------//FUNCION BLOQUEAR FARMACIA
     //FUNCION PARA AGREGAR FARMACIA
@@ -303,10 +310,99 @@ public class FarmaciaDao {
         }
     }
 
+    public void insertarFarmacia(BFarmacia farmacia, String contrasena){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
+        CredencialesDao credenciales = new CredencialesDao();
+        credenciales.registrarFarmacia(farmacia.getCorreo(),contrasena);
 
+        //SI RECIEN SE ESTA CREANDO NO PUEDE TENER PEDIDOS PENDIENTES
+        String sentenciaSQL = "INSERT INTO farmacia(ruc,nombre,direccion,distrito,bloqueado,pedidosPendientes,logueo_correo,fotos)\n" +
+                "VALUES(?,?,?,?,'Falso','No',?,?)";
+
+        try(Connection conn = DriverManager.getConnection(url,user,password);
+            PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)){
+
+            System.out.println("ESTOY LLENANDO LOS CAMPOS DE FARMACIA");
+            pstmt.setString(1,farmacia.getRuc());
+            pstmt.setString(2,farmacia.getNombre());
+            pstmt.setString(3,farmacia.getDireccion());
+            pstmt.setString(4, farmacia.getDistrito());
+            pstmt.setString(5,farmacia.getCorreo());
+            pstmt.setString(6,farmacia.getFotos());
+            pstmt.executeUpdate();
+            System.out.println("LLENE FARMACIA");
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
+
+    public String obtenerRUCFarmacia (String correo){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String RUC= null;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO RUC
+
+        String sentenciaSQL = "SELECT ruc, logueo_correo FROM farmacia\n"+
+                "WHERE logueo_correo = ?;";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+
+            pstmt.setString(1,correo);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    RUC = rs.getString(1);
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return RUC;
+    }
+
+    public boolean existeFarmacia(String RUC){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        boolean existeFarmacia = false;
+
+        String sentenciaSQL = "SELECT * FROM mydb.farmacia where ruc=?";
+
+        try (Connection conn = DriverManager.getConnection(url,user,password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)){
+            pstmt.setString(1,RUC);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                existeFarmacia = true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return existeFarmacia;
+    }
+
+
+
+
+
+
+}
 
 
 

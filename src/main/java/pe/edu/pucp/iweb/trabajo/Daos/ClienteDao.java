@@ -42,56 +42,62 @@ public class ClienteDao {
         Matcher matcher = pattern.matcher(fecha);
         return matcher.find();
     }
+    public boolean emailisValid(String email) {
+        String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
+    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //FUNCION PARA REGISTRAR CLIENTE
     public boolean registrarCliente(String correoElectronico,String contrasenia){
-            String sqlBusqueda = "SELECT correo FROM credenciales";
-            CredencialesDao c = new CredencialesDao();
-            boolean bandera = false;
-            try (Connection conn = DriverManager.getConnection(url, user, password);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlBusqueda)) {
-                while (rs.next()) {
-                    String correo = rs.getString(1);
-                    if (correo.equalsIgnoreCase(correoElectronico)) {
-                        bandera = true;
-                        break;
-                    }
+        String sqlBusqueda = "SELECT correo FROM credenciales";
+        CredencialesDao c = new CredencialesDao();
+        boolean bandera = false;
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sqlBusqueda)) {
+            while (rs.next()) {
+                String correo = rs.getString(1);
+                if (correo.equalsIgnoreCase(correoElectronico)) {
+                    bandera = true;
+                    break;
                 }
-                if (!bandera) {
-                    String sql = "INSERT INTO credenciales(correo,contrasena,rol) VALUES(?,?,'cliente')";
-                    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                        if (c.emailisValid(correoElectronico)) {
-                                if (c.contrasenaisValid(contrasenia)) {
-                                    pstmt.setString(1, correoElectronico);
-                                    pstmt.setString(2, contrasenia);
-                                    pstmt.executeUpdate();
-                                    System.out.println("Se ha registrado correctamente");
-                                    return true;
-                                } else {
-                                    System.out.println("La contraseña debe contener al menos: ");
-                                    System.out.println("1. Letra minuscula ");
-                                    System.out.println("2. Letra mayuscula ");
-                                    System.out.println("3. Un simbolo #/?@-");
-                                    System.out.println("4. Al menos 8 letras");
-                                    System.out.println("5. Ingrese al menos 1 numero");
-                                    return false;
-                                }
-
+            }
+            if (!bandera) {
+                String sql = "INSERT INTO credenciales(correo,contrasena,rol) VALUES(?,?,'cliente')";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    if (c.emailisValid(correoElectronico)) {
+                        if (c.contrasenaisValid(contrasenia)) {
+                            pstmt.setString(1, correoElectronico);
+                            pstmt.setString(2, contrasenia);
+                            pstmt.executeUpdate();
+                            System.out.println("Se ha registrado correctamente");
+                            return true;
                         } else {
-                            System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
+                            System.out.println("La contraseña debe contener al menos: ");
+                            System.out.println("1. Letra minuscula ");
+                            System.out.println("2. Letra mayuscula ");
+                            System.out.println("3. Un simbolo #/?@-");
+                            System.out.println("4. Al menos 8 letras");
+                            System.out.println("5. Ingrese al menos 1 numero");
                             return false;
                         }
+
+                    } else {
+                        System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
+                        return false;
                     }
-                } else {
-                    System.out.println("Este correo ya se encuentra registrado");
-                    return false;
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } else {
+                System.out.println("Este correo ya se encuentra registrado");
+                return false;
             }
-            return false;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
     //FUNCION QUE REGISTRA A UN USUARIO YA HAY CORREO
     public void registrarDatosUsuario(String logueo_correo, String dni, String nombre, String apellidos,String fecha,String distrito) {
@@ -244,7 +250,7 @@ public class ClienteDao {
     //FUNCION VER EL CARRITO DE COMPRAS
     public void verCarrito() {
         String sql = "SELECT idProducto,nombre,requiereReceta,foto,stock,precio FROM producto p\n" +
-                     "WHERE idProducto=?;";
+                "WHERE idProducto=?;";
         Iterator<String> it = carrito.keySet().iterator();
         System.out.println("IdProducto   |   Nombre del Producto  | Requiere Receta  |  Foto  |   Stock    |  Precio  | Cantidad");
         while (it.hasNext()) {
@@ -255,14 +261,14 @@ public class ClienteDao {
                 pstmt.setString(1, key);
                 ResultSet rs = pstmt.executeQuery();
                 rs.next();
-                    String idProducto = rs.getString(1);
-                    String nombre = rs.getString(2);
-                    boolean requiereReceta = rs.getBoolean(3);
-                    String foto = rs.getString(4);
-                    String stock = rs.getString(5);
-                    double precio = rs.getDouble(6);
-                    System.out.println(idProducto + "||" + nombre + "||" + requiereReceta + "||" + foto + "||" + stock + "||" + precio + "||" + value);
-                    System.out.println("------------------------------------------------------------------------");
+                String idProducto = rs.getString(1);
+                String nombre = rs.getString(2);
+                boolean requiereReceta = rs.getBoolean(3);
+                String foto = rs.getString(4);
+                String stock = rs.getString(5);
+                double precio = rs.getDouble(6);
+                System.out.println(idProducto + "||" + nombre + "||" + requiereReceta + "||" + foto + "||" + stock + "||" + precio + "||" + value);
+                System.out.println("------------------------------------------------------------------------");
 
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -272,15 +278,15 @@ public class ClienteDao {
 
     //FUNCION PARA AÑADIR UN PRODUCOT AL CARRITO
 
-   public void agregarAlCarrito( String agregarProducto){
+    public void agregarAlCarrito( String agregarProducto){
         String idProduct=agregarProducto;
         Scanner sc = new Scanner(System.in);
         System.out.print("Cantidad que desea Agregar al carrito: ");
         String cantidad =sc.nextLine();
         carrito.put(idProduct,cantidad);
-       System.out.println(carrito);
+        System.out.println(carrito);
 
-   }
+    }
 
 
     //FUNCION PARA BUSCAR UN PRODUCTO
@@ -391,7 +397,69 @@ public class ClienteDao {
         }
     }*/
 
+    public String obtenerIDCliente (String correo){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
+        String DNI = null;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO DNI
+
+        String sentenciaSQL = "SELECT dni,nombre,apellidos ,logueo_correo FROM cliente\n"+
+                "INNER JOIN credenciales ON (cliente.logueo_correo = credenciales.correo)\n"+
+                "WHERE logueo_correo = ?;\n";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+
+            pstmt.setString(1,correo);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    DNI = rs.getString(1);
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return DNI;
+    }
+
+
+    public boolean existeCliente (String DNI,String correo){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        boolean existeCliente = false;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO DNI
+
+        String sentenciaSQL = "SELECT * FROM cliente\n"+
+                "WHERE dni = ? AND logueo_correo = ?\n";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+
+            pstmt.setString(1,DNI);
+            pstmt.setString(2,correo);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    existeCliente = true;
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return existeCliente;
+    }
 }
-
 

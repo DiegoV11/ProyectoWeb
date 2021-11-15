@@ -10,15 +10,29 @@ public class BFarmacia {
     private String fotos;
     private String correo;
 
-    public BFarmacia(String ruc, String nombre, String correo, String distrito,String bloqueado, String pedidosPendientes,String direccion) {
+    //VERIFICAR SI ESTE CONSTRUCTOR SE USA EN ALGO
+    public BFarmacia(String ruc, String nombre, String direccion, String distrito, String fotos, String correo) {
+        this.ruc = ruc;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.distrito = distrito;
+        this.fotos = fotos;
+        this.correo = correo;
+    }
+
+    public BFarmacia() {
+    }
+
+    public BFarmacia(String ruc, String nombre, String correo, String distrito, String bloqueado, String pedidosPendientes, String direccion) {
         this.ruc = ruc;
         this.nombre = nombre;
         this.direccion = direccion;
         this.distrito = distrito;
         this.bloqueado = bloqueado;
         this.pedidosPendientes = pedidosPendientes;
-        this.correo =correo;
+        this.correo = correo;
     }
+
 
     public String getRuc() {
         return ruc;
@@ -84,3 +98,4 @@ public class BFarmacia {
         this.correo = correo;
     }
 }
+
