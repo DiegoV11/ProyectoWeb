@@ -16,18 +16,14 @@
 <body>
 
     <div class="main">
-
-        <!-- Sing in  Form -->
         <section class="sign-in">
             <div class="container">
                 <div class="signin-content">
                     <div class="signin-image">
                         <br>
                         <figure style="margin-bottom:0px;"><img src="Login/images/login.png" alt="sing up image"></figure>
-                        <!--a href="Login/registro.jsp" class="signup-image-link">Crear una cuenta</a-->
                         <a href="<%= request.getContextPath() %>/Registro" class="signup-image-link">Crear una cuenta</a>
                     </div>
-
                     <div class="signin-form">
                         <h2 style="text-align:center;" class="form-title">Iniciar sesión TeleDrugs</h2>
                         <form method="POST" action="<%=request.getContextPath()%>/PaginaPrincipal" class="register-form" id="login-form">
@@ -40,11 +36,8 @@
                                 <input type="password" name="constrasenia" id="contrasenia" placeholder="Contraseña"/>
                             </div>
                             <div class="form-group">
-                                <%/* <input type="checkbox" name="remember-me" id="remember-me" class="agree-term"
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Recordarme</label>*/%>
                                 <br>
                                 <br>
-                                <!--a href="Login/recuperar.jsp" class="signup-image-link">¿Has olvidado tu contraseña?</a-->
                                 <a href="<%= request.getContextPath() %>/RecuperarContrasena" class="signup-image-link">¿Has olvidado tu contraseña?</a>
                             </div>
                             <div class="form-group form-button">

@@ -12,28 +12,28 @@ public class FarmaciaDao {
 
 
     String user = "root";
-    String password = "root";
-    String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
+        String password = "root";
+        String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
 
-    public boolean nombreyApellidoValid(String nombre) {
-        String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(nombre);
-        return matcher.find();
-    }
-    public boolean rucValid(String ruc) {
-        String regex = "^[0-9]{11,11}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(ruc);
-        return matcher.find();
-    }
-    public boolean pedidosPendientes(String dni) {
-        String regex = "^[0-1]{1,1}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(dni);
-        return matcher.find();
-    }
-    Scanner sc = new Scanner(System.in);
+        public boolean nombreyApellidoValid(String nombre) {
+            String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(nombre);
+            return matcher.find();
+        }
+        public boolean rucValid(String ruc) {
+            String regex = "^[0-9]{11,11}$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(ruc);
+            return matcher.find();
+        }
+        public boolean pedidosPendientes(String dni) {
+            String regex = "^[0-1]{1,1}$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(dni);
+            return matcher.find();
+        }
+        Scanner sc = new Scanner(System.in);
 
     public boolean contrasenaisValid(String contrasenia) {
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -352,7 +352,7 @@ public class FarmaciaDao {
         String RUC= null;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO RUC
 
         String sentenciaSQL = "SELECT ruc, logueo_correo FROM farmacia\n"+
-                "WHERE logueo_correo = ?;";
+                                "WHERE logueo_correo = ?;";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
@@ -402,7 +402,7 @@ public class FarmaciaDao {
 
 
 
-}
 
+    }
 
 

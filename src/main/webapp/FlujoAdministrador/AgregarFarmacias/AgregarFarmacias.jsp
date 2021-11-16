@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean type="java.lang.String" scope="request" id="usuario"/>
 
-<html lang="en">
+<html>
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -16,26 +17,26 @@
         <link href="FlujoAdministrador/css/styles.css" rel="stylesheet" />
     </head>
     <body>
-              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#!">Teledrugs</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    	
-					
-					
-					</ul>
-						<div class="dropdown">
-						  <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-							 <i class='bi bi-person-circle' style='font-size:15px'></i>
-							 Usuario	
-						  </a>
 
-						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<li><a href="Login/iniciar.jsp" class="dropdown-item" >Cerrar sesión</a></li>
-						  </ul>
-						</div>                
+
+
+                    </ul>
+                    <div class="dropdown">
+                        <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class='bi bi-person-circle' style='font-size:15px'></i>
+                            Usuario
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a href="<%=request.getContextPath()%>" class="dropdown-item" >Cerrar sesión</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -43,38 +44,32 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Agregar Farmacia</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Administrador(a) Juan Perez</p>
+                    <p class="lead fw-normal text-white-50 mb-0">Administrador <%=usuario%></p>
                 </div>
             </div>
         </header>
         <!-- Section-->
-		<form>
+        <!--form-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-10 row-cols-xl-10 justify-content-center">
-                    <div style="width:600px"class="col mb-5">
+                    <div style="width:600px" class="col mb-5">
                         <div style="display:flex; justify-content:center; align-items:center; border-radius:10px; border: 2px solid #e1e7ec" class="card h-100">
-							
-							<h1 style="margin-top:20px;"class="display-7 fw-bolder">Farmacia</h1>
+                            <h1 style="margin-top:20px;"class="display-7 fw-bolder">Farmacia</h1>
                             <!-- Product image-->
-							
-								<form method="POST" action="<%=request.getContextPath()%>/AgregarFarmacia" class="register-form" id="register-form">
-								<i class="bi bi-camera-fill"style='font-size:30px'></i>
-								<input type="file" name="Imagen" id="add-new-photo" value="image/*">
-								<div class="signup-image">
-									<figure style="display:flex; justify-content:center; align-items:center; margin-top:20px; margin-bottom:0px"><img src="FlujoAdministrador/AgregarFarmacias/Imagenes/farmacia.jpg" alt="house image" width="230px" height="200px"></figure>
-								</div>
-
-
-								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="ruc" id="ruc" placeholder="RUC:">
-								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="direccion" id="direccion" placeholder="Dirección:">
-								<br>
-
-
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="distrito" list="listadistritos" placeholder="Distrito">
-									<datalist id="listadistritos">
+                            <form method="POST" action="<%=request.getContextPath()%>/AgregarFarmacia?usuario=<%=usuario%>">
+                                <i class="bi bi-camera-fill"style='font-size:30px'></i>
+                                <input type="file" name="Imagen" id="Foto" value="image/*">
+                                <div class="signup-image">
+                                    <figure style="display:flex; justify-content:center; align-items:center; margin-top:20px; margin-bottom:0px"><img src="FlujoAdministrador/AgregarFarmacias/Imagenes/farmacia.jpg" alt="house image" width="230px" height="200px"></figure>
+                                </div>
+                                <br>
+                                <input class="m-3" style="height:30px; width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="number" name="RUC" id="number" placeholder="RUC:">
+                                <br>
+                                <input class="m-3" style="height:30px; width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Direccion" id="Dirección" placeholder="Dirección:">
+                                <br>
+                                <input class="m-3" style="height:30px; width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="search" name="Distrito" list="listadistritos" placeholder="Distrito">
+                                <datalist id="listadistritos">
                                     <option value="Ancón">Ancón</option>
                                     <option value="Ate">Ate</option>
                                     <option value="Barranco">Barranco</option>
@@ -118,15 +113,15 @@
                                     <option value="Surquillo">Surquillo</option>
                                     <option value="Villa el Salvador">Villa el Salvador</option>
                                     <option value="Villa María del Triunfo">Villa María del Triunfo</option>
-								</datalist>
-								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="nombre" id="nombre" placeholder="Nombre de la Farmacia:">
-								<br>
-								<input style="width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="correo" id="correo" placeholder="Correo:">
-
-								<br>
-								<head>
-								<!-- Modal -->
+                                </datalist>
+                                <br>
+                                <input class="m-3" style="height:30px;width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="text" name="Nombre" id="nombre" placeholder="Nombre de la Farmacia:">
+                                <br>
+                                <input class="m-3" style="height:30px; width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="email" name="Correo" id="email" placeholder="Correo:">
+                                <br>
+                                <input class="m-3" style="height:30px; width:400px; border-radius:7px; border: 1px solid #e1e7ec; outline:none;" type="password" name="Contrasena" id="contrasena" placeholder="Contraseña:">
+                                <br>
+                                <head>
                                     <!-- Modal -->
                                     <div class="modal" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -136,41 +131,48 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    ¿Estas seguro de que quiere agregar la Farmacia?.
+                                                    ¿Estas seguro de que quiere agregar la Farmacia?
                                                 </div>
+
                                                 <div class="modal-footer">
+                                                    <!--button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button-->
+                                                    <!--button class="btn btn-success" type="submit"  data-bs-dismiss="modal">Aceptar</button-->
                                                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button class="btn btn-success" data-bs-dismiss="modal" type="submit">Aceptar</button>
+                                                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+                                                    <%//ESTO IBA EN LA LINEA DE ARRIBA onclick="alert('Se le ha enviado una confirmacion al correo electronico')">%>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-								<a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" onclick="return eliminardatos()" class="btn btn-danger" href="<%=request.getContextPath()%>/AgregarFarmacia">Limpiar</a>
-                                    <a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Aceptar</a>
-
+                                    <a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" onclick="return eliminardatos()" class="btn btn-danger" href="<%=request.getContextPath()%>/AgregarFarmacia?user=<%=usuario%>">Limpiar</a>
+                                    <!--a style="margin-bottom:20px; margin-top:0px; width:200px; float:left;" class="btn btn-danger">Aceptar</a-->
+                                    <a style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success"  href="#exampleModalToggle" data-bs-toggle="modal" role="button">Aceptar</a>
+                                    <!--button style="margin-bottom:20px; margin-top:0px; width:200px; float:right;" class="btn btn-success" href="#exampleModalToggle" data-bs-toggle="modal" >Aceptar</button-->
                                     <!--button class="btn btn-success" style="width:150px" data-bs-toggle="modal" type="submit">Aceptar</button-->
-                                </form>
-
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-			<a style="margin-bottom:20px; margin-right:20px; margin-top:0px; width:200px; float: right;" class="btn btn-secondary" href="<%=request.getContextPath()%>/AdminPrincipal" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Regresar</a>
-			<!-- <a href="javascript:history.back()"><img src="Imagenes/izquierda.jpg" height="48" width="48" style= "float:right" alt="Botón"</a> -->
-			
+            <a style="margin-bottom:20px; margin-right:20px; margin-top:0px; width:200px; float: right;" class="btn btn-secondary" href="<%=request.getContextPath()%>/AdminPrincipal?action=<%=usuario%>" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Regresar</a>
+            <!-- <a href="javascript:history.back()"><img src="Imagenes/izquierda.jpg" height="48" width="48" style= "float:right" alt="Botón"</a> -->
+            <!--/form-->
         </section>
-		<!-- <div id="regresar"> -->
-		
-          <!--  </div> -->
+        <!-- <div id="regresar"> -->
+
+        <!--  </div> -->
+
+        <!--/form-->
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; TeleDrugs 2021</p></div>
         </footer>
-		
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
     </body>
 </html>
+
 

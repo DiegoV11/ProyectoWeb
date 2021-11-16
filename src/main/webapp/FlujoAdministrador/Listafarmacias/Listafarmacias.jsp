@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
+<jsp:useBean type="java.lang.String" scope="request" id="correo"/>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -37,7 +38,7 @@
 						  </a>
 
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<li><a class="dropdown-item" href="Login/iniciar.jsp">Cerrar sesión</a></li>
+							<li><a class="dropdown-item" href="<%=request.getContextPath()%>">Cerrar sesión</a></li>
 						  </ul>
 						</div>                
                 </div>
@@ -47,14 +48,14 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Lista de Farmacias</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">ADMINISTRADOR</p>
+                    <p class="lead fw-normal text-white-50 mb-0"><%=correo%></p>
                 </div>
             </div>
 			<div style="margin-top:30px;"class = "box">
 					<input type="text" name="search" placeholder="Buscar farmacia" class="src" autocomplete = "off">
 			</div>
 			<div style="display:flex; align-items:center; justify-content:center; margin-top: 50px; margin-bottom: 15px;">
-				<a class="btn btn-success" href="<%=request.getContextPath()%>/AgregarFarmacia" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Agregar Farmacia</a>
+				<a class="btn btn-success" href="<%=request.getContextPath()%>/AgregarFarmacia?user=<%=correo%>" data-toast="" data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Your cart" data-toast-message="is updated successfully!" style="width:250px;">Agregar Farmacia</a>
 			</div>
 		</header>
 		
@@ -74,8 +75,8 @@
                     <th class="text-center">Bloquear</th>
                 </tr>
             </thead>
+			<form>
             <%for(BFarmacia farmacia: listaFarmacias){ %>
-
             <tbody>
                 <tr>
                     <td>
@@ -91,12 +92,11 @@
                     <td class="text-center text-lg text-medium"><%=farmacia.getBloqueado()%></td>
                     <td class="text-center">
 						<div class="form-check" style="display:flex; align-items:center; justify-content:center">
-
 							<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-						</div></td>
+						</div>
+					</td>
                 </tr>
                 <% }%>
-
             </tbody>
         </table>
 		<div class="shopping-cart-footer">
@@ -114,8 +114,9 @@
 				  </div>
 				  <div class="modal-footer">
 					<button style="margin-right:10px" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button class="btn btn-success" onclick="alert('Se han bloqueado las farmacias seleccionadas')" data-bs-dismiss="modal">Aceptar</button>
+					<button type="submit" class="btn btn-success" onclick="alert('Se han bloqueado las farmacias seleccionadas')" data-bs-dismiss="modal">Aceptar</button>
 				  </div>
+					</form>
 				</div>
 			  </div>
 			</div>

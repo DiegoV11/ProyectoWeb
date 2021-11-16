@@ -1,7 +1,6 @@
 <%@ page import="pe.edu.pucp.iweb.trabajo.Beans.BFarmacia" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,20 +27,24 @@
                         <form method="POST" action="<%=request.getContextPath()%>/PaginaPrincipal?act=reg" class="register-form" id="register-form" >
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input style="width:400px;" type="text" name="name" id="name" placeholder="Nombres y Apellidos"/>
+                                <input style="width:400px;" type="text" name="Nombres" id="name" placeholder="Nombres"/>
+                            </div>
+                            <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input style="width:400px;" type="text" name="Apellidos" id="lastname" placeholder="Apellidos"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="dni"><i class="zmdi zmdi-assignment-account"></i></label>
-                                <input style="width:400px;" type="number" name="dni" id="dni" placeholder="DNI"/>
+                                <input style="width:400px;" type="number" name="DNI" id="dni" placeholder="DNI"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="birthday"><i class="zmdi zmdi-calendar"></i></label>
-                                <input style="width:400px;" type="date" name="birthday" id="birthday" placeholder="Fecha de nacimiento"/>
+                                <input style="width:400px;" type="date" name="FechaNacimiento" id="birthday" placeholder="Fecha de nacimiento"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="listadistrito"><i class="zmdi zmdi-home"></i></label>
 
-                                <input style="width:400px;" type="search" name="distrito" list="listadistrito" placeholder="Distrito en el que reside">
+                                <input style="width:400px;" type="search" name="Distrito" list="listadistrito" placeholder="Distrito en el que reside">
 
                                 <datalist id="listadistrito">
                                     <option value="Ancón">Ancón</option>
@@ -92,15 +95,15 @@
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input style="width:400px;" type="email" name="email" id="email" placeholder="Correo electrónico"/>
+                                <input style="width:400px;" type="email" name="Correo" id="email" placeholder="Correo electrónico"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input style="width:400px;" type="password" name="pass" id="pass" placeholder="Contraseña"/>
+                                <input style="width:400px;" type="password" name="Contrasena" id="pass" placeholder="Contraseña"/>
                             </div>
                             <div class="form-group" style="width:400px; margin:auto; margin-bottom:30px;">
                                 <label for="re_pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input style="width:400px;" type="password" name="re_pass" id="re_pass" placeholder="Repita su contraseña"/>
+                                <input style="width:400px;" type="password" name="RePass" id="re_pass" placeholder="Repita su contraseña"/>
                             </div>
                             <!--<div class="form-group">
                                 <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />

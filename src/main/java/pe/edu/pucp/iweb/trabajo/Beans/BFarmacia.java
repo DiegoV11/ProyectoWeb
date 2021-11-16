@@ -98,4 +98,3 @@ public class BFarmacia {
         this.correo = correo;
     }
 }
-
