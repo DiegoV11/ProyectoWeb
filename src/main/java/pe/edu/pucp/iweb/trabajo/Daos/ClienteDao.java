@@ -430,36 +430,26 @@ public class ClienteDao {
     }
 
 
-    public boolean existeCliente (String DNI,String correo){
+    public boolean existeCliente(String correo, String dni){
+        Boolean existe = false;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        boolean existeCliente = false;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO DNI
-
-        String sentenciaSQL = "SELECT * FROM cliente\n"+
-                                "WHERE dni = ? AND logueo_correo = ?\n";
-
+        String sql="SELECT * FROM cliente WHERE dni = ? AND logueo_correo = ?";
         try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
-
-            pstmt.setString(1,DNI);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1,dni);
             pstmt.setString(2,correo);
-
-            try(ResultSet rs = pstmt.executeQuery()){
-                if(rs.next()){
-                    existeCliente = true;
-                }
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                existe=true;
             }
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-
-        return existeCliente;
+        return existe;
     }
 }
 

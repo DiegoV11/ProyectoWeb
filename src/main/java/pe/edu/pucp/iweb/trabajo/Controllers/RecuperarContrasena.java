@@ -36,6 +36,7 @@ public class RecuperarContrasena extends HttpServlet{
         if(dniCorrecto & correoCorrecto){
             //TOCA HACER LA VALIDACION DE SI EXISTE UN USUARIO CON ESAS CREDENCIALES
             boolean existeCliente = clienteDao.existeCliente(correo,DNI);
+            System.out.println(existeCliente);
             if(!existeCliente){
                 //SI NO EXISTE EL CLIENTE SE MUESTRA UN MENSAJE DE ERROR FEEDBACK
             }else{
