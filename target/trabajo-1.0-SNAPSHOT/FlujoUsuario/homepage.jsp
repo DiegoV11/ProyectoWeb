@@ -1,5 +1,10 @@
+<%@ page import="pe.edu.pucp.iweb.trabajo.Beans.BCliente" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="pe.edu.pucp.iweb.trabajo.Beans.BFarmacia" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%String correo = (String) request.getAttribute("correo");%>
+<%ArrayList<BFarmacia> listafarmacias = (ArrayList) request.getAttribute("listafarmacias");%>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -22,8 +27,8 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" aria-current="page" href="FlujoUsuario/homepage.jsp">Pagina principal</a></li>
-                        <li class="nav-item"><a class="nav-link" href="FlujoUsuario/historial.jsp">Estado de pedido</a></li>
+                        <li class="nav-item"><a class="nav-link" aria-current="page" href="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>">Pagina principal</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>&opcion=historialPedidos">Estado de pedido</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Farmacias</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -31,26 +36,22 @@
                                 <div class="signup-content">
                                     <div class="signup-form">
                                         <div style="text-align: center;"><h4 class="form-title">ELEGIR FARMACIA</h4></div>
-                                        <form method="POST" class="register-form" id="register-form">
+                                        <form method="post" action="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>&opcion=mostrarFarmacia" class= "register-form" id="register-form">
 
                                             <div class="form-group">
 												<div class="fake-input">
-													<input id="farmacia" type="search" list="listafarmacias" placeholder="Elige una farmacia" label for="listadistritos">
-													<img src="images/home-icon.png" width="20" />
+													<input id="farmacia" name="ruc" type="search" list="listafarmacias" placeholder="Elige una farmacia" label for="listadistritos" autocomplete="off">
+													<img src="FlujoUsuario/images/home-icon.png" width="20" />
 												</div>
                                                 <datalist id="listafarmacias">
-                                                    <option value="Farmacia Fibra Toxica">Farmacia Fibra Toxica</option>
-                                                    <option value="Farmacia Electroshock">Farmacia Electroshock</option>
-                                                    <option value="Farmacia Hormigon Armado">Farmacia Hormigon Armado</option>
-                                                    <option value="Farmacia Naranja Mecánica">Farmacia Naranja Mecánica</option>
-                                                    <option value="Farmacia Electroforce">Farmacia Electroforce</option>
-                                                    <option value="Farmacia Control Automático">Farmacia Control Automático</option>
-                                                    <option value="Farmacia Diablitos Azules">Farmacia Diablitos Azules</option>
+                                                    <%for (BFarmacia bFarmacia : listafarmacias){%>
+                                                    <option value="<%=bFarmacia.getNombre()%>"><%=bFarmacia.getDireccion()%></option>
+                                                    <%}%>
                                                 </datalist>
 
                                             </div>
                                             <div class="form-group form-button">
-												<div style="margin-top:5px; text-align: center;"><a class="btn btn-success" href="FlujoUsuario/homepage.jsp">Continuar</a></div>
+												<div style="margin-top:5px; text-align: center;"><button type="submit" class="btn btn-success">Continuar</button></div>
                                             </div>
                                         </form>
                                     
@@ -70,12 +71,12 @@
 						  </a>
 
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<li><a href="<%= request.getContextPath()%>/Perfil" class="dropdown-item" >Ver perfil</a></li>
-							<li><a href="<%= request.getContextPath() %>" class="dropdown-item" >Cerrar sesión</a></li>
+							<li><a href="<%= request.getContextPath()%>/Usuario?correo=<%=correo%>&opcion=mostrarPerfil" class="dropdown-item" >Ver perfil</a></li>
+							<li><a href="<%= request.getContextPath()%>" class="dropdown-item" >Cerrar sesión</a></li>
 						  </ul>
 						</div>                
 
-                    <form action="FlujoUsuario/shopping_cart.jsp">
+                    <form method="post" action="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>&opcion=carrito">
                         <form class="d-flex">
                             <button class="btn btn-outline-dark" type="submit">
                                 <i class="bi-cart-fill me-1"></i>
@@ -96,9 +97,11 @@
                     <p class="lead fw-normal text-white-50 mb-0">El mejor lugar para comprar</p>
                 </div>
             </div>
-			<div class = "box">
-                <input type="text" name="search" placeholder="Buscar producto" class="src" autocomplete = "off">
-		</div>
+            <form method="post" action="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>&opcion=Buscar">
+                <div class = "box">
+                    <input  type="text" name="search" placeholder="Buscar producto" class="src" autocomplete = "off">
+                </div>
+            </form>
         </header>
         <!-- Section-->
 		
@@ -131,7 +134,7 @@
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="jabon.jsp">Ver detalle</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>">Ver detalle</a></div>
                             </div>
                         </div>
                     </div>
@@ -161,7 +164,7 @@
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="FlujoUsuario/jabon.jsp">Ver detalle</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="<%=request.getContextPath()%>/Usuario?correo=<%=correo%>">Ver detalle</a></div>
                             </div>
                         </div>
                     </div>

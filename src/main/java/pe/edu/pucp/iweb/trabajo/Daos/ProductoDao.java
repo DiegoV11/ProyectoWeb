@@ -1,6 +1,9 @@
 package pe.edu.pucp.iweb.trabajo.Daos;
 
+import pe.edu.pucp.iweb.trabajo.Beans.BProducto;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ProductoDao {
@@ -11,25 +14,23 @@ public class ProductoDao {
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // FUNCION INSERTAR PRODUCTO|
-    public void inserta_producto(String nombre, String precioStr, String stockStr,String descripcion,String requiere,String farmacia_ruc) {
+    public void inserta_producto(String nombre, double precio, int stock, String descripcion,boolean requiereReceta,String farmacia_ruc) {
 
         Scanner sc = new Scanner(System.in);
-        boolean requiereReceta;
+
 
         String sqlInsert = "INSERT\tINTO mydb.producto (nombre,precio,stock,descripcion, requiereReceta,farmacia_ruc)\n" +
-                "VALUES(?,?,?,?, ?,?)";
+                "VALUES(?,?,?,?,?,?)";
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sqlInsert);) {
 
 
             pstmt.setString(1, nombre);
-            double precio = Double.parseDouble(precioStr);
             pstmt.setDouble(2, precio);
-            int stock = Integer.parseInt(stockStr);
             pstmt.setInt(3, stock);
             pstmt.setString(4, descripcion);
-            if (requiere.equalsIgnoreCase("si")) {
-                requiereReceta = true;
+            if (requiereReceta = true) {
+
             } else {
                 requiereReceta = false;
             }
@@ -42,8 +43,6 @@ public class ProductoDao {
             throwables.printStackTrace();
         }
     }
-
-
 
 
     // FUNCION ELIMINAR PRODUCTO
@@ -156,7 +155,59 @@ public class ProductoDao {
 
 
     //FUNCION QUE MUESTRA CARACTERISTICAS DEL PRODUCTO
-    public void homePageProductoCaracteristicas(String idProducto){
+    /*public void homePageProductoCaracteristicas(String idProducto){
+        Scanner sc = new Scanner(System.in);
+
+        String sqlBusqueda ="SELECT idProducto FROM producto;";
+        boolean banderita = false;
+
+        try(Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlBusqueda)){
+
+            while (rs.next()) {
+                String id = rs.getString(1);
+                if (idProducto.equals(id)) {
+                    banderita = true;
+                    break;
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        if(banderita){
+            String sql = "SELECT nombre,precio FROM producto WHERE idProducto = ?;";
+
+            try(Connection conn = DriverManager.getConnection(url, user, password);
+                PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+                pstmt.setString(1,idProducto);
+
+                try(ResultSet rs = pstmt.executeQuery()){
+                    String nombreProducto = rs.getString(1);
+                    String precioProductoStr = rs.getString(2);
+                    double precioProducto = Double.parseDouble(precioProductoStr);
+
+                    System.out.println(nombreProducto);
+                    System.out.println(precioProducto);
+
+                }
+
+            }catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        }
+        else {
+            System.out.println("No existe el producto!!!!");
+        }
+
+    }*/
+
+    //FUNCION QUE MUESTRA CARACTERISTICAS DEL PRODUCTO
+    public void ProductoCaracteristicas(String idProducto){
         Scanner sc = new Scanner(System.in);
 
         String sqlBusqueda ="SELECT idProducto FROM producto;";
@@ -206,5 +257,151 @@ public class ProductoDao {
         }
 
     }
+
+    public ArrayList<BProducto> ProductosPorFarmacia(String rucFarmacia){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<BProducto> listaProdxFarm = new ArrayList<>();
+
+
+        String sql = "select producto.foto,producto.idproducto,producto.nombre,producto.descripcion,producto.stock,producto.precio,producto.farmacia_ruc from producto " +
+                "join farmacia on producto.farmacia_ruc = farmacia.ruc " +
+                "where farmacia_ruc = ?";
+
+        try(Connection conn = DriverManager.getConnection(url, user, password);
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+
+            pstmt.setString(1,rucFarmacia);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+                while (rs.next()) {
+                    Blob fotoProducto = rs.getBlob(1);
+                    int idProducto = rs.getInt(2);
+                    String nombreProducto = rs.getString(3);
+                    String descProducto = rs.getString(4);
+                    int stockProducto = rs.getInt(5);
+                    String precioProductoStr = rs.getString(6);
+                    double precioProducto = Double.parseDouble(precioProductoStr);
+
+                    System.out.println(nombreProducto);
+                    System.out.println(precioProducto);
+
+
+                    listaProdxFarm.add(new BProducto(idProducto, nombreProducto, descProducto, null, stockProducto, precioProducto, rucFarmacia));
+                }
+
+
+
+            }
+            catch (SQLException e){
+                e.getSQLState();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+            throwables.getSQLState();
+            System.out.println("No existe el producto!!!!");
+
+        }
+
+        return listaProdxFarm;
+
+    }
+
+    public BProducto obtenerProducto(String idProducto) {
+        BProducto producto = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        String sql = "select * from producto where nombre = ? LIKE ?";
+
+        try (Connection connection = DriverManager.getConnection(url, "root", "root");
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+
+            preparedStatement.setString(1, idProducto);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    producto = new BProducto();
+                    producto.setIdProducto(rs.getInt(1));
+                    producto.setNombre(rs.getString(2));
+                    producto.setPrecio(rs.getDouble(3));
+                    producto.setStock(rs.getInt(4));
+                    producto.setDescripcion(rs.getString(5));
+                    producto.setRequiereReceta(rs.getBoolean(6));
+                    producto.setFarmaciaRUC(rs.getString(7));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return producto;
+    }
+
+    public void borrarproducto(String idProducto) throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        String sql = "DELETE FROM jobs WHERE job_id = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, "root", "root");
+             PreparedStatement pstmt = connection.prepareStatement(sql);) {
+            pstmt.setString(1, idProducto);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public ArrayList<BProducto> buscarProductoPorNombre(String nombre) {
+        ArrayList<BProducto> listaProductos = new ArrayList<>();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        nombre = nombre.toLowerCase();
+
+        String url = "jdbc:mysql://localhost:3306/mydb";
+        String sql = "select * from jobs where lower(job_title) like ?";
+
+        try (Connection connection = DriverManager.getConnection(url, "root", "root");
+             PreparedStatement pstmt = connection.prepareStatement(sql);) {
+            pstmt.setString(1, "%" + nombre + "%");
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    BProducto producto = new BProducto();
+                    producto.setIdProducto(rs.getInt(1));
+                    producto.setNombre(rs.getString(2));
+                    producto.setPrecio(rs.getDouble(3));
+                    producto.setStock(rs.getInt(4));
+                    producto.setDescripcion(rs.getString(5));
+                    producto.setRequiereReceta(rs.getBoolean(6));
+                    producto.setFarmaciaRUC(rs.getString(7));
+                    listaProductos.add(producto);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listaProductos;
+    }
+
+
 
 }

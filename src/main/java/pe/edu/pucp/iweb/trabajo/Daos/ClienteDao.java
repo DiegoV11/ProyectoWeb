@@ -1,12 +1,14 @@
 package pe.edu.pucp.iweb.trabajo.Daos;
 
+import pe.edu.pucp.iweb.trabajo.Beans.BBuscarProductoCliente;
+import pe.edu.pucp.iweb.trabajo.Beans.BCliente;
+import pe.edu.pucp.iweb.trabajo.Beans.BPedidoCliente;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -151,99 +153,64 @@ public class ClienteDao {
 
 
     //FUNCION QUE MUESTRA PERFIL DE CLIENTE
-    public void mostrarPerfil(String correo) {
-        String dni = null;
-        String nombre = null;
-        String apellidos = null;
-        String fecha_nac = null;
-        String distrito = null;
-        String email = null;
-        String sql = "SELECT c FROM cliente c  WHERE ? = c.logueo_correo";
-        boolean bandera = false;
+    public BCliente mostrarPerfil(String correo) {
+        String sql = "SELECT c.dni,c.nombre,c.apellidos,c.distrito FROM cliente c  WHERE ? = c.logueo_correo";
         try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, correo);
-            String sqlBusqueda = "SELECT dni,nombre,apellidos,fecha_nac,distrito,logueo_correo FROM cliente";
-            try (Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlBusqueda);) {
-                while (rs.next()) {
-                    email = rs.getString(6);
-                    if (email.equalsIgnoreCase(correo)) {
-                        dni = rs.getString(1);
-                        nombre = rs.getString(2);
-                        apellidos = rs.getString(3);
-                        fecha_nac = rs.getString(4);
-                        distrito = rs.getString(5);
-                        break;
-                    }
-
-                }
-                String DNI = dni;
-                System.out.println("DNI     |   Nombre  |   Apellidos   |   FechaDeNacimiento   |   Distrito    |   CorreoDeLogueo");
-                System.out.println(dni + "  |   " + nombre + "   |   " + apellidos + "    |   " + fecha_nac + "    |   " + distrito + "     |   " + email);
-                System.out.println("-----------------------------------------------------------------------------");
-                Scanner sc = new Scanner(System.in);
-                while (true) {
-                    System.out.println("1. Mostrar historial de pedidos");
-                    System.out.println("2. Ver el carrito de compras");
-                    System.out.println("3. Buscar un producto");
-                    System.out.print("Ingrese la opción --> ");
-                    String option = sc.nextLine();
-                    switch (option) {
-                        case "1":
-                            mostrarHistorial(DNI);
-                            break;
-                        case "2":
-                            verCarrito();
-                            break;
-                        case "3":
-                            buscarProducto();
-                            break;
-
-                    }
-
-
-                }
-
-            }
-        } catch (SQLException throwables) {
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            String dni = rs.getString(1);
+            String nombre = rs.getString(2);
+            String apellidos = rs.getString(3);
+            String distrito = rs.getString(4);
+            BCliente bCliente = new BCliente(dni,nombre,apellidos,distrito,correo);
+            return bCliente;
+        }catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return null;
     }
 
+    public String DNI(String correo) {
+        String sql = "SELECT c.dni FROM cliente c WHERE ? = c.logueo_correo";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, correo);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            String dni = rs.getString(1);
+            return dni;
+        }catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
 
     //FUNCION QUE MUESTAR HISTORIAL DE PEDIDOS
-    public void mostrarHistorial(String DNI) {
-
-        String sql = "SELECT precio,cantidad ,p.numeroOrden as \"Numero de Orden\", p.estado as \"Estado de pedido\",pr.nombre as \"Nombre de productos\" , f.nombre as \"Farmacia\"FROM pedidos p\n" +
+    public ArrayList<BPedidoCliente> mostrarHistorial(String DNI) {
+        ArrayList<BPedidoCliente> pedidos = new ArrayList<>();
+        String sql = "SELECT truncate(sum(pr.precio*pt.cantidad),1),sum(pt.cantidad),p.numeroOrden , p.estado , f.nombre FROM pedidos p\n" +
                 "INNER JOIN producto_tiene_pedidos pt ON pt.pedidos_numeroOrden=p.numeroOrden\n" +
                 "INNER JOIN producto pr ON pr.idProducto=pt.producto_idProducto\n" +
                 "INNER JOIN farmacia f ON pr.farmacia_ruc = f.ruc\n" +
-                "WHERE p.usuarioDni = ? ;";
-
+                "WHERE p.usuarioDni = ? GROUP BY p.numeroOrden;";
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, DNI);
             ResultSet rs = pstmt.executeQuery();
-
-            System.out.println("Numero de Orden     |   Estado de Pedido   |  Cantidad    |   Resumen de Pago    |  Producto    |    Farmacia");
             while (rs.next()) {
-                double precio = rs.getDouble(1);
+                double resumenPago = rs.getDouble(1);
                 int cantidad = rs.getInt(2);
-                String numeroOrden = rs.getString(3);
+                int numeroOrden = rs.getInt(3);
                 String estado = rs.getString(4);
-                String nombreProducto = rs.getString(5);
-                String farmacia = rs.getString(6);
-
-                double resumenPago = (precio * cantidad);
-                System.out.println(numeroOrden + "||" + estado + "||" + cantidad + "||" + resumenPago + "||" + nombreProducto + "||" + farmacia);
+                String farmacia = rs.getString(5);
+                pedidos.add(new BPedidoCliente(numeroOrden,cantidad, estado,resumenPago,farmacia));
             }
-
-
-            System.out.println("-------------------------------------------------------------------------");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return pedidos;
     }
 
 
@@ -291,36 +258,34 @@ public class ClienteDao {
 
     //FUNCION PARA BUSCAR UN PRODUCTO
 
-    public void buscarProducto() {
-        Scanner sc = new Scanner(System.in);
-        String sql = "SELECT idProducto,nombre,descripcion,requiereReceta,foto,stock,precio FROM producto p WHERE p.nombre LIKE ?";
-        String agregarProducto = "";
+    public ArrayList<BBuscarProductoCliente> buscarProducto(String nombre) {
+        ArrayList<BBuscarProductoCliente> productos = new ArrayList<>();
+
+        nombre = nombre.toLowerCase();
+
+        String sql = "SELECT nombre,descripcion,foto,precio FROM producto p WHERE lower(p.nombre) LIKE ?;";
+
+
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
-            System.out.print("Ingrese el nombre del producto a buscar: ");
-            String palabra = sc.nextLine();
-            palabra = palabra + "%";
-            pstmt.setString(1,palabra);
-            ResultSet rs = pstmt.executeQuery();
-            System.out.println("IdProducto   |   Nombre del Producto  | Descripcion | Requiere Receta  |  Foto  |   Stock    |  Precio ");
-            while (rs.next()) {
-                String nombre = rs.getString(2);
-                String idProducto = rs.getString(1);
-                String descripcion = rs.getString(3);
-                boolean requiereReceta = rs.getBoolean(4);
-                String foto = rs.getString(5);
-                int stock = rs.getInt(6);
-                double precio = rs.getDouble(7);
-                System.out.println(idProducto + "||" + nombre + "||" + descripcion + "||" + requiereReceta + "||" + foto + "||" + stock + "||" + precio);
-                agregarProducto = idProducto;
+            pstmt.setString(1,"%" + nombre + "%");
 
+            try(ResultSet rs = pstmt.executeQuery()){
+                while (rs.next()) {
+                    BBuscarProductoCliente producto = new BBuscarProductoCliente();
+                    producto.setNombre(rs.getString(1));
+                    producto.setDescripcion(rs.getString(2));
+                    producto.setFoto(rs.getString(3));
+                    producto.setPrecio(rs.getDouble(4));
+                    productos.add(producto);
+                }
             }
-            System.out.println("------------------------------------------------------------------------");
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
-        salir:
+        /*salir:
         while (true) {
 
             System.out.println("1. Agregar al carrito de compras");
@@ -335,67 +300,29 @@ public class ClienteDao {
                     buscarProducto();
                     break salir;
             }
-        }
+        }*/
+        return productos;
     }
 
-    //FUNCION PARA AGREGAR CLIENTE
-    /*public void agregarCliente(String logueo_correo){
-        Scanner sc = new Scanner(System.in);
-        String sqlBusqueda = "SELECT * FROM cliente";
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sqlBusqueda);) {
-            while(true){
-                System.out.println("Ingrese DNI: ");
-                String dni = sc.nextLine();
-                boolean bandera = false;
-                while (rs.next()) {
-                    String DNI = rs.getString(1);
-                    if (dni.equalsIgnoreCase(DNI)){
-                        bandera = true;
-                    }
-                }
-                if (!bandera && dniValid(dni)) {
-                    String sqlInsert = "INSERT INTO cliente(dni,nombre,apellidos,fecha_nac,distrito,logueo_correo)\n" +
-                            "VALUES(?,?,?,?,?,?)";
-                    try (PreparedStatement pstmt = conn.prepareStatement(sqlInsert);){
-                        while (true){
-                            System.out.print("Ingresar nombre: ");
-                            String nombre = sc.nextLine();
-                            System.out.print("Ingresar apellidos: ");
-                            String apellidos = sc.nextLine();
-                            if (nombreyApellidoValid(nombre)) {
-                                pstmt.setString(2, nombre);
-                                pstmt.setString(3, apellidos);
-                                while(true){
-                                    System.out.print("Ingresar fecha de nacimiento con el siguiente formato YYYY/MM/DD: ");
-                                    String fecha_nac = sc.nextLine();
-                                    SimpleDateFormat formatter = new SimpleDateFormat();
-                                    Date date = formatter.parse(fecha_nac);
-                                    pstmt.setString(4, fecha_nac);
-                                    System.out.print("Ingrese su distrito: ");
-                                    String distrito = sc.nextLine();
-                                    pstmt.setString(5, distrito);
-                                    pstmt.setString(1, dni);
-                                    pstmt.setString(6, logueo_correo);
-                                    pstmt.executeUpdate();
-                                        break;
-                                }
-
-                            }else{
-                                System.out.println("Ha ingresado nombre y apellidos invalidos");
-                            }
-                        }
-                    }
-
-                }else {
-                    System.out.println("dni incorrecto");
-                }
-            }
-        }catch (SQLException | ParseException throwables) {
+    public BCliente updatePerfil(String nombre, String Apellido, String distrito, String correo){
+        String sql="UPDATE cliente c SET c.nombre = ?, c.apellidos = ?, c.distrito = ? WHERE c.logueo_correo= ?;";
+        try(Connection conn = DriverManager.getConnection(url,user,password);
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setString(1,nombre);
+            pstmt.setString(2,Apellido);
+            pstmt.setString(3,distrito);
+            pstmt.setString(4,correo);
+            pstmt.executeUpdate();
+            BCliente bCliente = mostrarPerfil(correo);
+            return bCliente;
+        }catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-    }*/
+        return null;
+    }
+
+
+
 
     public String obtenerIDCliente (String correo){
         try {

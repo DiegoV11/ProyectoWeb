@@ -10,6 +10,29 @@ public class BProducto {
     private double precio;
     private String farmaciaRUC;
 
+    public BProducto() {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.foto = foto;
+        this.stock = stock;
+        this.precio = precio;
+        this.farmaciaRUC = farmaciaRUC;
+
+    }
+
+    public BProducto(int idProducto, String nombre, String descripcion, String foto, int stock, double precio, String farmaciaRUC) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.foto = foto;
+        this.stock = stock;
+        this.precio = precio;
+        this.farmaciaRUC = farmaciaRUC;
+    }
+
+
+
     public int getIdProducto() {
         return idProducto;
     }

@@ -1,6 +1,7 @@
 package pe.edu.pucp.iweb.trabajo.Daos;
 
 import pe.edu.pucp.iweb.trabajo.Beans.BFarmacia;
+import pe.edu.pucp.iweb.trabajo.Beans.BPedidoHistorial;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -110,38 +111,28 @@ public class FarmaciaDao {
 
 
     //FUNCION QUE MUESTAR HISTORIAL DE PEDIDOS FARMACIA
-    public void mostrarHistorialPedidosSca(){
+    public ArrayList<BPedidoHistorial> mostrarHistorialPedidos(){
 
-        Scanner sc= new Scanner(System.in);
-        System.out.print("Ingrese el ruc de la farmacia: ");
-        String ruc = sc.nextLine();
+        ArrayList<BPedidoHistorial> listaHistorialPedidos= new ArrayList<>();
 
-        String sql ="SELECT f.ruc,pt.pedidos_numeroOrden,CONCAT(cl.nombre,\" \",cl.apellidos),cl.dni,pe.estado,pe.fechaRecojo, pt.recetas FROM farmacia f \n" +
-                "INNER JOIN producto p ON p.farmacia_ruc=f.ruc\n" +
-                "INNER JOIN producto_tiene_pedidos pt ON p.idProducto = pt.producto_idProducto\n" +
-                "INNER JOIN pedidos pe ON pe.numeroOrden=pt.pedidos_numeroOrden\n" +
-                "INNER JOIN cliente cl ON cl.dni = pe.usuarioDni\n" +
-                "WHERE f.ruc = ?\n" +
-                "GROUP BY pedidos_numeroOrden\n" +
-                "ORDER BY pedidos_numeroOrden ASC;";
+        String sql ="select CONCAT(c.nombre,\" \",c.apellidos),c.dni,p.estado,p.fechaRecojo from cliente c inner join pedidos p on (c.dni = p.usuarioDni) order by p.fechaRecojo;";
 
         try(Connection conn = DriverManager.getConnection(url,user,password);
-            PreparedStatement pstmt = conn.prepareStatement(sql);){
-            pstmt.setString(1,ruc);
-            ResultSet rs = pstmt.executeQuery();
+            Statement stmt = conn.createStatement();){
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()){
-                String ruc1=rs.getString(1);
-                int pedidosOrden = rs.getInt(2);
-                String nombre_completo = rs.getString(3);
-                String dni = rs.getString(4);
-                String estado =  rs.getString(5);
-                String fecha_recojo = rs.getString(6);
-                String recetas= rs.getString(7);
-                System.out.println(pedidosOrden + "||" +nombre_completo + "||"+dni+ "||" + estado +"||" + fecha_recojo + "||" + recetas);
+                String nombreCompleto =rs.getString(1);
+                String dni = rs.getString(2);
+                String estado = rs.getString(3);
+                String fechaRecojo = rs.getString(4);
+                listaHistorialPedidos.add(new BPedidoHistorial(nombreCompleto,dni,estado,fechaRecojo));
+                System.out.println(listaHistorialPedidos);
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return listaHistorialPedidos;
     }
     //FUNCION QUE LISTA PROD
     public void listaProductos(String ruc){
