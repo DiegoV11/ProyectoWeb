@@ -6,6 +6,13 @@ public class BPedido {
     private String estado;
     private String usuarioDNI;
 
+    public BPedido(int numeroOrden, String fechaRecojo, String estado, String usuarioDNI) {
+        this.numeroOrden = numeroOrden;
+        this.fechaRecojo = fechaRecojo;
+        this.estado = estado;
+        this.usuarioDNI = usuarioDNI;
+    }
+
     public int getNumeroOrden() {
         return numeroOrden;
     }
