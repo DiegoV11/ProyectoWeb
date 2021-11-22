@@ -79,7 +79,9 @@
 							<th class="text-center">Bloquear</th>
 						</tr>
 					</thead>
-					<form>
+					<% int i =0; %>
+					<form method="post" action="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&opcion=bloquear&num=2">
+
 							<%for(BFarmacia farmacia: listaFarmacias){ %>
 						<tbody>
 							<tr>
@@ -96,10 +98,11 @@
 								<td class="text-center text-lg text-medium"><%=farmacia.getBloqueado()%></td>
 								<td class="text-center">
 									<div class="form-check" style="display:flex; align-items:center; justify-content:center">
-										<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+										<input class="form-check-input" type="checkbox" value="<%=farmacia.getCorreo()%>" name ="check<%=i%>" id="check">
 									</div>
 								</td>
 							</tr>
+							<%i=i+1;%>
 							<% }%>
 						</tbody>
 				</table>
@@ -118,7 +121,7 @@
 								</div>
 								<div class="modal-footer">
 									<button style="margin-right:10px" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-									<button type="submit" class="btn btn-success" onclick="alert('Se han bloqueado las farmacias seleccionadas')" data-bs-dismiss="modal">Aceptar</button>
+									<button type="submit" class="btn btn-success"  data-bs-dismiss="modal">Aceptar</button>
 								</div>
 								</form>
 							</div>

@@ -52,6 +52,18 @@ public class AdminServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo + "&busqueda=" + search);
             }
 
+        }else if (opcion.equalsIgnoreCase("bloquear")){
+            String numero = request.getParameter("num")!= null ? request.getParameter("num") : "1";
+            int num = Integer.parseInt(numero);
+            String check="check";
+            ArrayList<String> lista = new ArrayList<String>();
+            for(int i=0; i<=num;i++){
+                String check_num=check +i;
+                String checks = request.getParameter(check_num) != null ? request.getParameter(check_num) : "ayyuda";
+                lista.add(checks);
+            }
+            System.out.println(lista.get(0));
+            System.out.println(lista.get(1));
         }
 
 
