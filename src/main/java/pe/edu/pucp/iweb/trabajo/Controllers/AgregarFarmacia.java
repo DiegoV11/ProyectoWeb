@@ -35,15 +35,25 @@ public class AgregarFarmacia extends HttpServlet {
         String nombreFarmacia = request.getParameter("Nombre");
         String correoFarmacia = request.getParameter("Correo");
         String contrasenaFarmacia = request.getParameter("Contrasena");
+        System.out.println(imagenFarmacia);
+        System.out.println(RUCFarmacia);
+        System.out.println(direccionFarmacia);
+        System.out.println(distritoFarmacia);
+        System.out.println(nombreFarmacia);
+        System.out.println(correoFarmacia);
+        System.out.println(contrasenaFarmacia);
 
         //VALIDACION DEL RUC
         FarmaciaDao farmaciaDao = new FarmaciaDao();
         boolean correctoRUCFarmacia = farmaciaDao.rucValid(RUCFarmacia);
-
+        System.out.println(correctoRUCFarmacia);
         //VALIDACION DE CONTRASENA
         boolean correctoContrasena = farmaciaDao.contrasenaisValid(contrasenaFarmacia);
-
-        if(correctoRUCFarmacia && correctoContrasena){
+        System.out.println(correctoContrasena);
+        //VALIDACION DEL CORREO
+        boolean correctoCorreo = farmaciaDao.emailisValid(correoFarmacia);
+        System.out.println(correctoCorreo);
+        if(correctoRUCFarmacia && correctoContrasena & correctoCorreo){
             boolean existeFarmacia = farmaciaDao.existeFarmacia(RUCFarmacia);
             if(existeFarmacia){
                 //YA EXISTE UNA IMPRIMIRIA UN FEEDBACK DICIENDO QUE YA EXISTE UNA FARMACIA
@@ -55,7 +65,7 @@ public class AgregarFarmacia extends HttpServlet {
             }
         }else{
             //ACA SE TENDRIA QUE IMPRIMIR UN MENSAJE DE FEEDBACK DICIENDO QUE EL CAMPO DE RUC ESTA MAL INGRESADO
-            //SI ESTA MAL EL RUC O LA CONTRASENA
+            //SI ESTA MAL EL RUC O LA CONTRASENA O EL CORREO
         }
 
     }

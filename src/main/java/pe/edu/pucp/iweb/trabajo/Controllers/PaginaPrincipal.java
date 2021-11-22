@@ -113,6 +113,7 @@ public class PaginaPrincipal extends HttpServlet {
 package pe.edu.pucp.iweb.trabajo.Controllers;
 
 import pe.edu.pucp.iweb.trabajo.Beans.BAdministrador;
+import pe.edu.pucp.iweb.trabajo.Beans.BCliente;
 import pe.edu.pucp.iweb.trabajo.Daos.ClienteDao;
 import pe.edu.pucp.iweb.trabajo.Daos.CredencialesDao;
 
@@ -134,44 +135,85 @@ public class PaginaPrincipal extends HttpServlet {
         String act = request.getParameter("act") != null ? request.getParameter("act") : "login";
 
         if (act.equalsIgnoreCase("reg")) {
-            String nombreCompleto = request.getParameter("name");
-            String dni = request.getParameter("dni");
-            String birthday = request.getParameter("birthday");
-            String distrito = request.getParameter("distrito");
-            String email = request.getParameter("email");
-            String contrasenia = request.getParameter("pass");
-            String recontrasenia = request.getParameter("re_pass");
+            String nombre = request.getParameter("Nombres");
+            String apellido = request.getParameter("Apellidos");
+            String dni = request.getParameter("DNI");
+            String birthday = request.getParameter("FechaNacimiento");
+            String distrito = request.getParameter("Distrito");
+            String email = request.getParameter("Correo");
+            String contrasenia = request.getParameter("Contrasena");
+            String recontrasenia = request.getParameter("RePass");
 
-            ClienteDao clienteDao = new ClienteDao();
-            boolean registro=clienteDao.registrarCliente(email,contrasenia);
-            if(registro) {
-                clienteDao.registrarDatosUsuario(email, dni, nombreCompleto, nombreCompleto, birthday, distrito);
-                response.sendRedirect(request.getContextPath());
-            }else {
-                response.sendRedirect(request.getContextPath() + "/Registro");
+            CredencialesDao credencialesDao = new CredencialesDao();
+            boolean nombreCorrecto = credencialesDao.nombreValid(nombre);
+            boolean apellidoCorrecto = credencialesDao.apellidoValid(apellido);
+            boolean dniCorrecto = credencialesDao.dniValid(dni);
+            boolean birthdayCorrecto = credencialesDao.fechaIsValid(birthday);
+            //EL DISTRITO YA NO SE VALIDA PORQUE VA A ESCOGER UNO DE LA LISTA
+            boolean correoCorrecto = credencialesDao.emailisValid(email);
+            boolean contrasenaCorrecto = credencialesDao.contrasenaisValid(contrasenia);
+            boolean recontrasenaCorrecto = false;
+
+            if(recontrasenia.equals(contrasenia)){
+                recontrasenaCorrecto = true;
             }
 
+            ClienteDao clienteDao = new ClienteDao();
+            if(nombreCorrecto & apellidoCorrecto & dniCorrecto & birthdayCorrecto & contrasenaCorrecto & recontrasenaCorrecto){
+                //VALIDAMOS SI EXISTE EL CLIENTE
+                boolean existeCliente = clienteDao.existeCliente(email,contrasenia);
+                if(existeCliente == true){
+                    //SE IMPRIME UN MENSAJE DE ERRROR UN FEEDBACK
+                }
+                else{
+                    BCliente clientito = new BCliente(dni,nombre,apellido,birthday,distrito,email);
+                    // YA TENGO EL CLIENTE AHORA FALTA PASAR LA CONTRASEÑA PARA PODER REGISTRARLO
+                    //PRIMERO REGISTRAMOS EN LAS CREDENCIALES
+                    credencialesDao.insertCliente(email,contrasenia);
 
+                    //UNA VEZ REGISTRADO LAS CREDENCIALES , REGISTRAMOS EL CLIENTE
+                    clienteDao.registrarCliente(clientito);
+                    response.sendRedirect(request.getContextPath() + "/Registro");
+                }
+
+            }
+            else{
+                //COMO SON DEMASIADAS VALIDACIONES , HABRIA UN MONTON DE CASOS , ENTONCES LO IDEAL SERIA MOSTRARLE UN SOLO MENSAJE
+                //DICIENDOLE QUE LOS CAMPOS ESTAN MAL Y YA , EN FORMA GENERAL PARA NO DECIRLE UNO EN ESPECIFICO
+
+            }
 
         } else if (act.equalsIgnoreCase("login")) {
 
             String constrasenia = request.getParameter("constrasenia");
             String correo = request.getParameter("correo");
-            CredencialesDao credencialesDao = new CredencialesDao();
-            String rol = credencialesDao.inicioSesion(correo, constrasenia);
-            BAdministrador bAdministrador=new BAdministrador();
-            bAdministrador.setContrasenia(constrasenia);
-            bAdministrador.setLogueoCorreo(correo);
 
-            if (rol.equalsIgnoreCase("administrador")) {
-                response.sendRedirect(request.getContextPath() + "/AdminPrincipal");
-            } else if (rol.equalsIgnoreCase("cliente")) {
-                response.sendRedirect(request.getContextPath() + "/Usuario?correo=" + correo);
-            } else if (rol.equalsIgnoreCase("farmacia")) {
-                response.sendRedirect(request.getContextPath() + "/FarmaciaPrincipal");
+            CredencialesDao credencialesDao = new CredencialesDao();
+
+            if(credencialesDao.existeCredenciales(correo,constrasenia)){
+                String rol = credencialesDao.rolCredenciales(correo);
+                System.out.println(rol);
+                //String DNI = credencialesDao.obtenerIDCliente(correo);
+                //BAdministrador bAdministrador = new BAdministrador();
+                //bAdministrador.setContrasenia(constrasenia);
+                //bAdministrador.setLogueoCorreo(correo);
+
+                if (rol.equalsIgnoreCase("administrador")) {
+                    response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo);
+                } else if (rol.equalsIgnoreCase("cliente")) {
+                    response.sendRedirect(request.getContextPath() + "/Usuario?correo=" + correo);
+                } else if (rol.equalsIgnoreCase("farmacia")) {
+                    response.sendRedirect(request.getContextPath() + "/FarmaciaPrincipal");
+                }
+
             }
+            else{
+                //MENSAJE DE ERROR MENSAJE DE FEEDBACK
+            }
+
         }
     }
 }
+
 
 

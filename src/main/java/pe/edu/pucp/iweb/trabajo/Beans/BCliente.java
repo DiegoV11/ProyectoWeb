@@ -18,7 +18,14 @@ public class BCliente {
         this.distrito = distrito;
         this.logueoCorreo = logueoCorreo;
     }
-
+    public BCliente(String DNI, String nombre, String apellidos, String fechaNacimiento, String distrito, String logueoCorreo) {
+        this.DNI = DNI;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.fechaNacimiento = fechaNacimiento;
+        this.distrito = distrito;
+        this.logueoCorreo = logueoCorreo;
+    }
     public String getDNI() {
         return DNI;
     }

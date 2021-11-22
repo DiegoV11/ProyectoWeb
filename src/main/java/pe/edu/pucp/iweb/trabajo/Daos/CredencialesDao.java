@@ -1,5 +1,7 @@
 package pe.edu.pucp.iweb.trabajo.Daos;
 
+import pe.edu.pucp.iweb.trabajo.Beans.BCliente;
+
 import java.sql.*;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -10,10 +12,35 @@ public class CredencialesDao {
     String password = "root";
     String url = "jdbc:mysql://localhost:3306/mydb";
 
-    public boolean nombreyApellidoValid(String nombre) {
+    public boolean nombreValid(String nombre) {
         String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(nombre);
+        return matcher.find();
+    }
+
+    public boolean apellidoValid(String apellido) {
+        String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(apellido);
+        return matcher.find();
+    }
+    //FUNCION PARA VALIDAR DNI
+    public boolean dniValid(String dni) {
+        String regex = "^[0-9]{8,8}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(dni);
+        return matcher.find();
+    }
+
+    //FUNCION PARA VALIDAR FECHA
+    public boolean fechaIsValid(String fecha) {
+        String regex = "^((2000|2400|2800|(19|2[0-9](0[48]|[2468][048]|[13579][26])))-02-29)$"
+                + "|^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$"
+                + "|^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$"
+                + "|^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(fecha);
         return matcher.find();
     }
 
@@ -160,6 +187,28 @@ public class CredencialesDao {
         }
     }
 
+    public boolean existeCredenciales(String correo,String contrasena){
+        Boolean existe = false;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        String sentenciaSQL ="SELECT * FROM credenciales WHERE correo = ? AND contrasena = ?";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+
+            pstmt.setString(1,correo);
+            pstmt.setString(2,contrasena);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                existe=true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return existe;
+    }
 
     //FUNCION PARA REALIZAR INICIO DE SESION
     public String inicioSesion(String correo, String contrasena){
@@ -203,6 +252,81 @@ public class CredencialesDao {
 
     }
 
+    public String obtenerIDCliente (String correo){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
+        String DNI = null;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO DNI
+
+        String sentenciaSQL = "SELECT dni,nombre,apellidos ,logueo_correo FROM cliente\n"+
+                "INNER JOIN credenciales ON (cliente.logueo_correo = credenciales.correo)\n"+
+                "WHERE logueo_correo = ?;\n";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+
+            pstmt.setString(1,correo);
+
+            try(ResultSet rs = pstmt.executeQuery()){
+                if(rs.next()){
+                    DNI = rs.getString(1);
+                }
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return DNI;
+    }
+
+
+    public  void updateContrasenaCliente(BCliente clientito, String contrasena){
+        String correoUsuario = clientito.getLogueoCorreo();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String sentenciaSQL = "UPDATE credenciales  SET contrasena = ? WHERE correo = ?;";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+            pstmt.setString(1,contrasena);
+            pstmt.setString(2,correoUsuario);
+            pstmt.executeUpdate();
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+
+    public void insertCliente(String correo, String contrasena){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String sentenciaSQL = "INSERT INTO credenciales(correo,contrasena,rol)\n" +
+                "VALUES(?,?,?)";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
+            pstmt.setString(1,correo);
+            pstmt.setString(2,contrasena);
+            pstmt.setString(3,"cliente");
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
 
 }

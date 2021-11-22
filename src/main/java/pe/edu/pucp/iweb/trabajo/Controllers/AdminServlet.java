@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
@@ -15,15 +16,46 @@ public class AdminServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String correo = request.getParameter("action");
-        System.out.println("admin");
-        System.out.println(correo);
+        String busqueda = request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "";
         FarmaciaDao farmaciaDao = new FarmaciaDao() ;
-        ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias();
-        request.setAttribute("listaFarmacias",listaFarmacias);
-        request.setAttribute("correo",correo);
-        RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
-        view.forward(request,response);
+        if(busqueda.equals("")){
+            ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias();
+            request.setAttribute("listaFarmacias",listaFarmacias);
+            request.setAttribute("correo",correo);
+            RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
+            view.forward(request,response);
+
+        }else{
+            //FALTA CONFIGURAR LA VISTA DE LISTA DE FARMACIAS PARA QUE SE VEA SI ESTA BLOQUEADO O NO LA FARMACIA
+            request.setAttribute("listaFarmacias",farmaciaDao.listaFarmaciasPorBusqueda(busqueda));
+            request.setAttribute("correo",correo);
+            RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
+            view.forward(request,response);
+        }
+
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String correo = request.getParameter("correo");
+        String opcion = request.getParameter("opcion") != null ? request.getParameter("opcion") : "";
+        //System.out.println(opcion);
+        //FarmaciaDao farmaciaDao = new FarmaciaDao();
+        if(opcion.equalsIgnoreCase("Buscar")){
+            String search = request.getParameter("search") != null ? request.getParameter("search") : "";
+            // System.out.println(search);
+            if(opcion.equalsIgnoreCase("")){
+                response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo );
 
+            }else{
+                //System.out.println("ENTRE HASTA ANTES DE ENVIAR LA LISTA");
+                //response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo + "?lista=" + farmaciaDao.listaFarmaciasPorBusqueda(search));
+                response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo + "&busqueda=" + search);
+            }
+
+        }
+
+
+
+
+    }
 }

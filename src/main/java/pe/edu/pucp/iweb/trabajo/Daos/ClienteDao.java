@@ -54,52 +54,52 @@ public class ClienteDao {
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //FUNCION PARA REGISTRAR CLIENTE
     public boolean registrarCliente(String correoElectronico,String contrasenia){
-            String sqlBusqueda = "SELECT correo FROM credenciales";
-            CredencialesDao c = new CredencialesDao();
-            boolean bandera = false;
-            try (Connection conn = DriverManager.getConnection(url, user, password);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sqlBusqueda)) {
-                while (rs.next()) {
-                    String correo = rs.getString(1);
-                    if (correo.equalsIgnoreCase(correoElectronico)) {
-                        bandera = true;
-                        break;
-                    }
+        String sqlBusqueda = "SELECT correo FROM credenciales";
+        CredencialesDao c = new CredencialesDao();
+        boolean bandera = false;
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sqlBusqueda)) {
+            while (rs.next()) {
+                String correo = rs.getString(1);
+                if (correo.equalsIgnoreCase(correoElectronico)) {
+                    bandera = true;
+                    break;
                 }
-                if (!bandera) {
-                    String sql = "INSERT INTO credenciales(correo,contrasena,rol) VALUES(?,?,'cliente')";
-                    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                        if (c.emailisValid(correoElectronico)) {
-                                if (c.contrasenaisValid(contrasenia)) {
-                                    pstmt.setString(1, correoElectronico);
-                                    pstmt.setString(2, contrasenia);
-                                    pstmt.executeUpdate();
-                                    System.out.println("Se ha registrado correctamente");
-                                    return true;
-                                } else {
-                                    System.out.println("La contraseña debe contener al menos: ");
-                                    System.out.println("1. Letra minuscula ");
-                                    System.out.println("2. Letra mayuscula ");
-                                    System.out.println("3. Un simbolo #/?@-");
-                                    System.out.println("4. Al menos 8 letras");
-                                    System.out.println("5. Ingrese al menos 1 numero");
-                                    return false;
-                                }
-
+            }
+            if (!bandera) {
+                String sql = "INSERT INTO credenciales(correo,contrasena,rol) VALUES(?,?,'cliente')";
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    if (c.emailisValid(correoElectronico)) {
+                        if (c.contrasenaisValid(contrasenia)) {
+                            pstmt.setString(1, correoElectronico);
+                            pstmt.setString(2, contrasenia);
+                            pstmt.executeUpdate();
+                            System.out.println("Se ha registrado correctamente");
+                            return true;
                         } else {
-                            System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
+                            System.out.println("La contraseña debe contener al menos: ");
+                            System.out.println("1. Letra minuscula ");
+                            System.out.println("2. Letra mayuscula ");
+                            System.out.println("3. Un simbolo #/?@-");
+                            System.out.println("4. Al menos 8 letras");
+                            System.out.println("5. Ingrese al menos 1 numero");
                             return false;
                         }
+
+                    } else {
+                        System.out.println("El correo ingresado es incorrecto debe ser de la forma por ejemplo: ejemplo@gmail.com");
+                        return false;
                     }
-                } else {
-                    System.out.println("Este correo ya se encuentra registrado");
-                    return false;
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } else {
+                System.out.println("Este correo ya se encuentra registrado");
+                return false;
             }
-            return false;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
     //FUNCION QUE REGISTRA A UN USUARIO YA HAY CORREO
     public void registrarDatosUsuario(String logueo_correo, String dni, String nombre, String apellidos,String fecha,String distrito) {
@@ -121,7 +121,23 @@ public class ClienteDao {
         }
     }
 
+    public void registrarCliente(BCliente clientito) {
+        String sqlInsert = "INSERT INTO cliente(dni,nombre,apellidos,fecha_nac,distrito,logueo_correo)\n" +
+                "VALUES(?,?,?,?,?,?)";
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement pstmt = conn.prepareStatement(sqlInsert)) {
+            pstmt.setString(1,clientito.getDNI());
+            pstmt.setString(2,clientito.getNombre());
+            pstmt.setString(3,clientito.getApellidos());
+            pstmt.setString(4,clientito.getFechaNacimiento());
+            pstmt.setString(5,clientito.getDistrito());
+            pstmt.setString(6,clientito.getLogueoCorreo());
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
+    }
     //FUNCION QUE ELIMINA A UN CLIENTE CON SU CORREO
     public void eliminarCliente(String correo) {
         String sql = "DELETE c FROM cliente c  WHERE ? = c.logueo_correo;";

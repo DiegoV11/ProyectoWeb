@@ -13,28 +13,36 @@ public class FarmaciaDao {
 
 
     String user = "root";
-        String password = "root";
-        String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
+    String password = "root";
+    String url = "jdbc:mysql://localhost:3306/mydb?serverTimezone=America/Lima";
 
-        public boolean nombreyApellidoValid(String nombre) {
-            String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(nombre);
-            return matcher.find();
-        }
-        public boolean rucValid(String ruc) {
-            String regex = "^[0-9]{11,11}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(ruc);
-            return matcher.find();
-        }
-        public boolean pedidosPendientes(String dni) {
-            String regex = "^[0-1]{1,1}$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(dni);
-            return matcher.find();
-        }
-        Scanner sc = new Scanner(System.in);
+    public boolean nombreyApellidoValid(String nombre) {
+        String regex = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:[\\]]]{1,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(nombre);
+        return matcher.find();
+    }
+
+    public boolean emailisValid(String email) {
+        String regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.find();
+    }
+
+    public boolean rucValid(String ruc) {
+        String regex = "^[0-9]{11,11}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(ruc);
+        return matcher.find();
+    }
+    public boolean pedidosPendientes(String dni) {
+        String regex = "^[0-1]{1,1}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(dni);
+        return matcher.find();
+    }
+    Scanner sc = new Scanner(System.in);
 
     public boolean contrasenaisValid(String contrasenia) {
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -343,7 +351,7 @@ public class FarmaciaDao {
         String RUC= null;  //IGUAL SE LE VA ALLENAR EL CAMPO YA QUE SE VALIDO QUE EXISTE UNA PERSONA CON DICHO RUC
 
         String sentenciaSQL = "SELECT ruc, logueo_correo FROM farmacia\n"+
-                                "WHERE logueo_correo = ?;";
+                "WHERE logueo_correo = ?;";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)) {
@@ -388,12 +396,54 @@ public class FarmaciaDao {
         return existeFarmacia;
     }
 
+    public ArrayList<BFarmacia> listaFarmaciasPorBusqueda(String opcion){
 
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        ArrayList<BFarmacia> listaFarmacias = new ArrayList<>();
 
+        String sentenciaSQL = "SELECT f.ruc, f.nombre, l.correo, f.distrito,f.pedidosPendientes,bloqueado,f.direccion FROM farmacia f\n"+
+                "INNER JOIN credenciales l ON l.correo = f.logueo_correo\n"+
+                "INNER JOIN producto p ON p.farmacia_ruc=f.ruc\n"+
+                "INNER JOIN producto_tiene_pedidos pt ON p.idProducto = pt.producto_idProducto\n"+
+                "GROUP BY f.ruc\n"+
+                "HAVING lower(f.nombre) LIKE ?;";
 
+        try(Connection conn = DriverManager.getConnection(url,user,password);
+            PreparedStatement pstmt = conn.prepareStatement(sentenciaSQL)){
 
+            pstmt.setString(1,"%" + opcion + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                String ruc = rs.getString(1);
+                String nombre = rs.getString(2);
+                String correo = rs.getString(3);
+                String distrito =  rs.getString(4);
+                String pedidosPendientes1 = rs.getString(5);
+                String bloqueado= rs.getString(6);
+                String direccion = rs.getString(7);
+                BFarmacia f = new BFarmacia(ruc, nombre,correo, distrito,bloqueado,pedidosPendientes1,direccion);
+                listaFarmacias.add(f);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
+        return listaFarmacias;
 
     }
 
 
+
+
+
+
+
+
+
+
+
+}
