@@ -5,6 +5,7 @@
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
 <jsp:useBean type="java.lang.String" scope="request" id="correo"/>
 <jsp:useBean type="java.lang.Integer"  scope="request"  id="pag" />
+<jsp:useBean type="java.lang.Integer"  scope="request"  id="index" />
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -141,12 +142,19 @@
 									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag-1%>">Previous</a>
 									</li>
 								<%}%>
-								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=1">1</a></li>
-								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=2">2</a></li>
-								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=3">3</a></li>
-								<li class="page-item">
+								<%for (int j=1; j<=index;j++){%>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=j%>"> <%=j%>  </a></li>
+								<%}
+								int a=0;
+								if(pag==2){%>
+								<li class="page-item disabled">
 									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag+1%>">Next</a>
 								</li>
+								<%}else {%>
+								<li class="page-item">
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag+1%>">Next</a>
+									<%}%>
+
 							</ul>
 							<a class="btn btn-danger justify-content-right" style="float:right;" data-bs-toggle="modal" href="#exampleModalToggle">Bloquear</a>
 						</nav>

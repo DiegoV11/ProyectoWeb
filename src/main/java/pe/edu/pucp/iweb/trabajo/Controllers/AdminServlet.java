@@ -22,9 +22,12 @@ public class AdminServlet extends HttpServlet {
         FarmaciaDao farmaciaDao = new FarmaciaDao() ;
         if(busqueda.equals("")){
             ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias_offset(offset);
+            ArrayList<BFarmacia> listaFarmaciasTotal = farmaciaDao.mostrarListaFarmacias();
             request.setAttribute("listaFarmacias",listaFarmacias);
             request.setAttribute("correo",correo);
             request.setAttribute("pag",Integer.parseInt(offset));
+            System.out.println(Integer.parseInt(offset));
+            request.setAttribute("index",listaFarmaciasTotal.size()/4+1);
             RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
             view.forward(request,response);
 
