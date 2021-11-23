@@ -36,6 +36,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        FarmaciaDao farmaciaDao = new FarmaciaDao();
         String correo = request.getParameter("correo");
         String opcion = request.getParameter("opcion") != null ? request.getParameter("opcion") : "";
         //System.out.println(opcion);
@@ -57,13 +58,19 @@ public class AdminServlet extends HttpServlet {
             int num = Integer.parseInt(numero);
             String check="check";
             ArrayList<String> lista = new ArrayList<String>();
-            for(int i=0; i<=num;i++){
-                String check_num=check +i;
-                String checks = request.getParameter(check_num) != null ? request.getParameter(check_num) : "ayyuda";
-                lista.add(checks);
+            for(int i=0; i<num;i++){
+                String check_num=check+i;
+                String elemento = request.getParameter(check_num) != null ? request.getParameter(check_num) : "no";
+                if (!elemento.equals("no")){
+                    lista.add(elemento);
+                }
             }
-            System.out.println(lista.get(0));
-            System.out.println(lista.get(1));
+            for (String f : lista){
+                farmaciaDao.bloquearFarmacia(f);
+                System.out.println(f);
+            }
+            String search ="";
+            response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo);
         }
 
 

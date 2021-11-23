@@ -80,7 +80,7 @@
 						</tr>
 					</thead>
 					<% int i =0; %>
-					<form method="post" action="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&opcion=bloquear&num=2">
+					<form method="post" action="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&opcion=bloquear&num=<%=listaFarmacias.size()%>">
 
 							<%for(BFarmacia farmacia: listaFarmacias){ %>
 						<tbody>
@@ -98,11 +98,12 @@
 								<td class="text-center text-lg text-medium"><%=farmacia.getBloqueado()%></td>
 								<td class="text-center">
 									<div class="form-check" style="display:flex; align-items:center; justify-content:center">
-										<input class="form-check-input" type="checkbox" value="<%=farmacia.getCorreo()%>" name ="check<%=i%>" id="check">
+										<input class="form-check-input" type="checkbox" value="<%=farmacia.getRuc()%>" name ="check<%=i%>" id="check">
+										<%i=i+1;%>
 									</div>
 								</td>
 							</tr>
-							<%i=i+1;%>
+
 							<% }%>
 						</tbody>
 				</table>
@@ -117,7 +118,7 @@
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									¿Estas seguro de que quiere Bloquear la(s) farmacias seleccionadas?.
+									¿Estas seguro de que quiere bloquear la(s) farmacias seleccionadas?.
 								</div>
 								<div class="modal-footer">
 									<button style="margin-right:10px" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
