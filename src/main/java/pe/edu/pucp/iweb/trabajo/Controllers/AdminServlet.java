@@ -4,6 +4,7 @@ import pe.edu.pucp.iweb.trabajo.Beans.BFarmacia;
 import pe.edu.pucp.iweb.trabajo.Daos.FarmaciaDao;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,13 +16,15 @@ import javax.servlet.annotation.*;
 public class AdminServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String correo = request.getParameter("action");
+        String correo = request.getParameter("correo");
         String busqueda = request.getParameter("busqueda") != null ? request.getParameter("busqueda") : "";
+        String offset = request.getParameter("offset") != null ? request.getParameter("offset") : "1";
         FarmaciaDao farmaciaDao = new FarmaciaDao() ;
         if(busqueda.equals("")){
-            ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias();
+            ArrayList<BFarmacia> listaFarmacias = farmaciaDao.mostrarListaFarmacias_offset(offset);
             request.setAttribute("listaFarmacias",listaFarmacias);
             request.setAttribute("correo",correo);
+            request.setAttribute("pag",Integer.parseInt(offset));
             RequestDispatcher view = request.getRequestDispatcher("FlujoAdministrador/Listafarmacias/Listafarmacias.jsp");
             view.forward(request,response);
 
@@ -66,11 +69,16 @@ public class AdminServlet extends HttpServlet {
                 }
             }
             for (String f : lista){
-                farmaciaDao.bloquearFarmacia(f);
+
+                try {
+                    farmaciaDao.bloquearFarmacia(f);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(f);
             }
             String search ="";
-            response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo);
+            response.sendRedirect(request.getContextPath() + "/AdminPrincipal?correo=" + correo);
         }
 
 

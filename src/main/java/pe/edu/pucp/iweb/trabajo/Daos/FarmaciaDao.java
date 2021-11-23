@@ -222,7 +222,7 @@ public class FarmaciaDao {
     }
 
     //FUNCION PARA BLOQUEAR FARMACIA
-    public boolean bloquearFarmacia(String rucStr){
+    public boolean bloquearFarmacia(String rucStr) throws SQLException {
         String sqlUpdate = "UPDATE farmacia f SET f.bloqueado ='Verdadero' WHERE f.ruc = ?";
         String sqlBusqueda ="SELECT f.pedidosPendientes FROM farmacia f WHERE f.ruc = ?";
         try (Connection conn = DriverManager.getConnection(url,user,password);
@@ -240,8 +240,6 @@ public class FarmaciaDao {
             }else{
                 System.out.println("No se puede bloquear porque tiene pedidos pendientes");
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return false;
     }
@@ -263,6 +261,39 @@ public class FarmaciaDao {
             Statement stmt = conn.createStatement();){
 
             ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()){
+                String ruc = rs.getString(1);
+                String nombre = rs.getString(2);
+                String correo = rs.getString(3);
+                String distrito =  rs.getString(4);
+                String pedidosPendientes1 = rs.getString(5);
+                String bloqueado= rs.getString(6);
+                String direccion = rs.getString(7);
+                BFarmacia f = new BFarmacia(ruc, nombre,correo, distrito,bloqueado,pedidosPendientes1,direccion);
+                listaFarmacias.add(f);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listaFarmacias;
+    }
+
+    public ArrayList<BFarmacia> mostrarListaFarmacias_offset(String offset){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        ArrayList<BFarmacia> listaFarmacias = new ArrayList<>();
+        String sql ="SELECT f.ruc, f.nombre, l.correo, f.distrito,f.pedidosPendientes,f.bloqueado,f.direccion FROM farmacia f\n" +
+                "INNER JOIN credenciales l ON l.correo = f.logueo_correo\n" +
+                "GROUP BY f.ruc LIMIT 4 OFFSET ?;";
+
+        try(Connection conn = DriverManager.getConnection(url,user,password);
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            int offset_num = (Integer.parseInt(offset)-1)*4;
+            pstmt.setInt(1,offset_num);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()){
                 String ruc = rs.getString(1);
                 String nombre = rs.getString(2);
@@ -403,10 +434,8 @@ public class FarmaciaDao {
         }
         ArrayList<BFarmacia> listaFarmacias = new ArrayList<>();
 
-        String sentenciaSQL = "SELECT f.ruc, f.nombre, l.correo, f.distrito,f.pedidosPendientes,bloqueado,f.direccion FROM farmacia f\n"+
+        String sentenciaSQL = "SELECT f.ruc, f.nombre, l.correo, f.distrito,f.pedidosPendientes,f.bloqueado,f.direccion FROM farmacia f\n"+
                 "INNER JOIN credenciales l ON l.correo = f.logueo_correo\n"+
-                "INNER JOIN producto p ON p.farmacia_ruc=f.ruc\n"+
-                "INNER JOIN producto_tiene_pedidos pt ON p.idProducto = pt.producto_idProducto\n"+
                 "GROUP BY f.ruc\n"+
                 "HAVING lower(f.nombre) LIKE ?;";
 

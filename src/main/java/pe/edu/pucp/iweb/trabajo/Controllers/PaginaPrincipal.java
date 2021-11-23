@@ -199,7 +199,7 @@ public class PaginaPrincipal extends HttpServlet {
                 //bAdministrador.setLogueoCorreo(correo);
 
                 if (rol.equalsIgnoreCase("administrador")) {
-                    response.sendRedirect(request.getContextPath() + "/AdminPrincipal?action=" + correo);
+                    response.sendRedirect(request.getContextPath() + "/AdminPrincipal?correo=" + correo);
                 } else if (rol.equalsIgnoreCase("cliente")) {
                     response.sendRedirect(request.getContextPath() + "/Usuario?correo=" + correo);
                 } else if (rol.equalsIgnoreCase("farmacia")) {

@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
 <jsp:useBean type="java.lang.String" scope="request" id="correo"/>
+<jsp:useBean type="java.lang.Integer"  scope="request"  id="pag" />
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -36,7 +37,6 @@
 							<i class='bi bi-person-circle' style='font-size:15px'></i>
 							Usuario
 						</a>
-
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>">Cerrar sesión</a></li>
 						</ul>
@@ -80,7 +80,7 @@
 						</tr>
 					</thead>
 					<% int i =0; %>
-					<form method="post" action="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&opcion=bloquear&num=2">
+					<form method="post" action="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&opcion=bloquear&num=<%=listaFarmacias.size()%>">
 
 							<%for(BFarmacia farmacia: listaFarmacias){ %>
 						<tbody>
@@ -98,11 +98,12 @@
 								<td class="text-center text-lg text-medium"><%=farmacia.getBloqueado()%></td>
 								<td class="text-center">
 									<div class="form-check" style="display:flex; align-items:center; justify-content:center">
-										<input class="form-check-input" type="checkbox" value="<%=farmacia.getCorreo()%>" name ="check<%=i%>" id="check">
+										<input class="form-check-input" type="checkbox" value="<%=farmacia.getRuc()%>" name ="check<%=i%>" id="check">
+										<%i=i+1;%>
 									</div>
 								</td>
 							</tr>
-							<%i=i+1;%>
+
 							<% }%>
 						</tbody>
 				</table>
@@ -117,7 +118,7 @@
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									¿Estas seguro de que quiere Bloquear la(s) farmacias seleccionadas?.
+									¿Estas seguro de que quiere bloquear la(s) farmacias seleccionadas?.
 								</div>
 								<div class="modal-footer">
 									<button style="margin-right:10px" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -130,14 +131,21 @@
 					<div class="column">
 						<nav aria-label="Page navigation example">
 							<ul class="pagination justify-content-center">
+								<%if (pag==1){%>
 								<li class="page-item disabled">
-									<a class="page-link">Previous</a>
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag-1%>">Previous</a>
 								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<%}else
+								{%>
+									<li class="page-item">
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag-1%>">Previous</a>
+									</li>
+								<%}%>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=1">1</a></li>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=2">2</a></li>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=3">3</a></li>
 								<li class="page-item">
-									<a class="page-link" href="#">Next</a>
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag+1%>">Next</a>
 								</li>
 							</ul>
 							<a class="btn btn-danger justify-content-right" style="float:right;" data-bs-toggle="modal" href="#exampleModalToggle">Bloquear</a>

@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean type="java.util.ArrayList<pe.edu.pucp.iweb.trabajo.Beans.BFarmacia>" scope="request" id="listaFarmacias"/>
 <jsp:useBean type="java.lang.String" scope="request" id="correo"/>
+<jsp:useBean type="java.lang.Integer"  scope="request"  id="pag" />
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -36,7 +37,6 @@
 							<i class='bi bi-person-circle' style='font-size:15px'></i>
 							Usuario
 						</a>
-
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 							<li><a class="dropdown-item" href="<%=request.getContextPath()%>">Cerrar sesión</a></li>
 						</ul>
@@ -131,14 +131,21 @@
 					<div class="column">
 						<nav aria-label="Page navigation example">
 							<ul class="pagination justify-content-center">
+								<%if (pag==1){%>
 								<li class="page-item disabled">
-									<a class="page-link">Previous</a>
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag-1%>">Previous</a>
 								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<%}else
+								{%>
+									<li class="page-item">
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag-1%>">Previous</a>
+									</li>
+								<%}%>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=1">1</a></li>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=2">2</a></li>
+								<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=3">3</a></li>
 								<li class="page-item">
-									<a class="page-link" href="#">Next</a>
+									<a class="page-link" href="<%=request.getContextPath()%>/AdminPrincipal?correo=<%=correo%>&offset=<%=pag+1%>">Next</a>
 								</li>
 							</ul>
 							<a class="btn btn-danger justify-content-right" style="float:right;" data-bs-toggle="modal" href="#exampleModalToggle">Bloquear</a>
